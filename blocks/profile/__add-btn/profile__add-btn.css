@@ -1,9 +1,9 @@
-.add-btn {
+.profile__add-btn {
   background-color: transparent;
   padding: 0;
-  background-image: url(../../images/add-btn.svg);
+  background-image: url(../../../images/add-btn.svg);
   background-position: center;
-  background-size: contain;
+  background-size: 22px 22px;
   background-repeat: no-repeat;
   width: 150px;
   height: 50px;
@@ -12,25 +12,26 @@
   transition: opacity .3s ease-in;
 }
 
-.add-btn:hover {
+.profile__add-btn:hover {
   cursor: pointer;
   opacity: .6;
 }
 
-.add-btn:focus {
+.profile__add-btn:focus {
   outline: none;
   border: 3px solid rgb(0, 204, 204);
   border-radius: 2px;
 }
 
-@media screen and (max-width: 767px) {
-  .add-btn {
+@media screen and (max-width: 850px) {
+  .profile__add-btn {
     width: 90%;
   }
 }
 
 @media screen and (max-width: 560px) {
-  .add-btn {
+  .profile__add-btn {
     width: 100%;
+    background-size: 16px 16px;
   }
 }

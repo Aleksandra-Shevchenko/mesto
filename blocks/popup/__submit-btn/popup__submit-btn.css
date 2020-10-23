@@ -1,4 +1,4 @@
-.submit-btn {
+.popup__submit-btn {
   background-color: #000;
   color: #fff;
   border: none;
@@ -14,18 +14,18 @@
   transition: background-color .3s ease-in;
 }
 
-.submit-btn:hover {
+.popup__submit-btn:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.submit-btn:focus {
+.popup__submit-btn:focus {
   outline: none;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
 }
 
 @media screen and (max-width:560px) {
-  .submit-btn {
+  .popup__submit-btn {
     font-size: 14px;
   }
 }
