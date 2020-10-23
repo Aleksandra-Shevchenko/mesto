@@ -1,0 +1,27 @@
+.element__like {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  background-image: url(../../../images/like.svg);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 20.76px;
+  height: 18.13px;
+  flex: none;
+  transition: transform .3s ease-in;
+}
+
+.element__like:hover {
+  transform: scale(1.2);
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.element__like:focus {
+  outline: none;
+  border: 3px solid  rgb(0, 204, 204);
+  border-radius: 2px;
+  width: 25px;
+  height: 23px;
+}

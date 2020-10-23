@@ -1,0 +1,37 @@
+.add-btn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  background-image: url(../../images/add-btn.svg);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 150px;
+  height: 50px;
+  border: 2px solid #FFF;
+  border-radius: 2px;
+  transition: opacity .3s ease-in;
+}
+
+.add-btn:hover {
+  cursor: pointer;
+  opacity: .6;
+}
+
+.add-btn:focus {
+  outline: none;
+  border: 3px solid rgb(0, 204, 204);
+  border-radius: 2px;
+}
+
+@media screen and (max-width: 767px) {
+  .add-btn {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .add-btn {
+    width: 100%;
+  }
+}
