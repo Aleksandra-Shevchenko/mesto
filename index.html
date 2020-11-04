@@ -32,7 +32,7 @@
       </section>
 
       <section class="elements page__center" aria-label="Фотографии">
-        <article class="element">
+        <!-- <article class="element">
           <img  class="element__pic" src="./images/hibini.jpg" alt="Горы Хибины">
           <div class="element__desc">
             <h2 class="element__title">Хибины</h2>
@@ -73,7 +73,7 @@
             <h2 class="element__title">Выборг</h2>
             <button class="element__like" type="button" aria-label="Лайкнуть"></button>
           </div>
-        </article>
+        </article> -->
       </section>
     </main>
 
@@ -93,7 +93,16 @@
       </div>
     </section>
 
-  </div>
+    <template id="card">
+      <article class="element">
+        <img  class="element__pic">
+        <div class="element__desc">
+          <h2 class="element__title"></h2>
+          <button class="element__like" type="button" aria-label="Лайкнуть"></button>
+        </div>
+      </article>
+    </template>
+
   <script src="./scripts/index.js"></script>
 
 </body>
