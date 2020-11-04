@@ -10,25 +10,38 @@ let profileJobInput = popup.querySelector('.popup__input_text_job');
 let formElement = popup.querySelector('.popup__form');
 
 
-function showPopup () {
+// функция открытия попапа
+function showPopup() {
   popup.classList.add('popup_opened');
   profileNameInput.value = profileNameElement.textContent;
   profileJobInput.value = profileJobElement.textContent;
 }
 
-function closePopup () {
+// функция закрытия попапа
+function closePopup() {
   popup.classList.remove('popup_opened');
 }
 
-function handlePopup (evt) {
-    evt.preventDefault();
-    profileNameElement.textContent = profileNameInput.value;
-    profileJobElement.textContent = profileJobInput.value;
-    closePopup();
+// функция редактирования профиля
+function handlePopup(evt) {
+  evt.preventDefault();
+  profileNameElement.textContent = profileNameInput.value;
+  profileJobElement.textContent = profileJobInput.value;
+  closePopup();
 }
+
+// функция обработки клика за пределами области popup__container
+function handlePopupClick(evt) {
+  if (evt.target.classList.contains('popup')){
+    closePopup();
+  }
+}
+
 
 formElement.addEventListener('submit', handlePopup);
 
 editButton.addEventListener('click', showPopup);
 
 popupClose.addEventListener('click', closePopup);
+
+popup.addEventListener('mousedown', handlePopupClick);
