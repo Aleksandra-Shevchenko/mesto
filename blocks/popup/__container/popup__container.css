@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 430px;
+  min-width: 430px;
   min-height: 330px;
   box-sizing: border-box;
   padding: 32px 36px 36px;
@@ -13,7 +13,9 @@
 
 @media screen and (max-width: 560px) {
   .popup__container {
-    width: 282px;
-    padding: 25px 22px;
+    min-width: 240px;
+    min-height: 258px;
+    padding: 30px 16px;
   }
 }
+

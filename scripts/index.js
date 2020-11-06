@@ -1,53 +1,3 @@
-let container = document.querySelector('.container');
-let editButton = container.querySelector('.profile__edit-btn');
-let profileNameElement = container.querySelector('.profile__title');
-let profileJobElement = container.querySelector('.profile__subtitle');
-
-let popup = document.querySelector('.popup');
-let popupClose = popup.querySelector('.popup__close');
-let profileNameInput = popup.querySelector('.popup__input_text_name');
-let profileJobInput = popup.querySelector('.popup__input_text_job');
-let formElement = popup.querySelector('.popup__form');
-
-
-// функция открытия попапа
-function showPopup() {
-  popup.classList.add('popup_opened');
-  profileNameInput.value = profileNameElement.textContent;
-  profileJobInput.value = profileJobElement.textContent;
-}
-
-// функция закрытия попапа
-function closePopup() {
-  popup.classList.remove('popup_opened');
-}
-
-// функция редактирования профиля
-function handlePopup(evt) {
-  evt.preventDefault();
-  profileNameElement.textContent = profileNameInput.value;
-  profileJobElement.textContent = profileJobInput.value;
-  closePopup();
-}
-
-// функция обработки клика за пределами области popup__container
-function handlePopupClick(evt) {
-  console.log(evt.target);
-  if (evt.target.classList.contains('popup')){
-    closePopup();
-  }
-}
-
-formElement.addEventListener('submit', handlePopup);
-
-editButton.addEventListener('click', showPopup);
-
-popupClose.addEventListener('click', closePopup);
-
-popup.addEventListener('mousedown', handlePopupClick);
-
-
-// Проектная работа №5
 const initialCards = [
   {
     name: 'Архыз',
@@ -77,29 +27,156 @@ const initialCards = [
 
 const cardContainer = document.querySelector('.elements'); //контейнер куда будем вставлять карточки
 
-// Функция создания карточки должна решать только одну задачу - создавать DOM элемент карточки, но не вставлять её сразу в контейнер. Функция createCard: создает карточку из темплейта, подставляет данные, навешивает обработчики и возращает созданную карточку.
+const container = document.querySelector('.container'); // общий контейнер контента
+
+//элементы секции профайл
+const profileNameElement = container.querySelector('.profile__title');
+const profileJobElement = container.querySelector('.profile__subtitle');
+const editButton = container.querySelector('.profile__edit-btn');
+const addPhotoButton = container.querySelector('.profile__add-btn');
+
+//элементы попапа для редактирования профайла
+const popupProfile = document.querySelector('.popup_type_edit');
+const popupCloseProfile = popupProfile.querySelector('.popup__close');
+const formElementProfile = popupProfile.querySelector('.popup__form');
+const profileNameInput = popupProfile.querySelector('.popup__input_text_name');
+const profileJobInput = popupProfile.querySelector('.popup__input_text_job');
+
+//элементы попапа для добавления фото
+const popupAddCard = document.querySelector('.popup_type_add-card');
+const popupCloseAddCard = popupAddCard.querySelector('.popup__close');
+const formElementAddCard = popupAddCard.querySelector('.popup__form');
+const formInputCardName = popupAddCard.querySelector('.popup__input_add-card_name');
+const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_link');
+
+// элементы попапа открытия изображения в большом формате
+const popupImage = document.querySelector('.popup_type_image');
+const popupBigPhoto = popupImage.querySelector('.popup__photo');
+const popupImageTitle = popupImage.querySelector('.popup__photo-title');
+const popupCloseImage = popupImage.querySelector('.popup__close');
 
 
-// функция создания карточки с фото, она принимает объект с данными карточки
+
+// функция открытия попапа
+function showPopup(typePopup) {
+  typePopup.classList.add('popup_opened');
+}
+
+// функция закрытия попапа
+function closePopup(typePopup) {
+  typePopup.classList.remove('popup_opened');
+}
+
+// функция открывающая попап редактирования профиля с заполненными данными
+function openProfilePopup(typePopup) {
+  showPopup(typePopup);
+  profileNameInput.value = profileNameElement.textContent;
+  profileJobInput.value = profileJobElement.textContent;
+}
+
+// функция очищающая поля ввода в попапе
+function cleanInputPopup(inputOne, inputTwo) {
+  inputOne.value = '';
+  inputTwo.value = '';
+}
+
+// функция редактирования профиля
+function handlePopupProfile(evt) {
+  evt.preventDefault();
+  profileNameElement.textContent = profileNameInput.value;
+  profileJobElement.textContent = profileJobInput.value;
+  closePopup(popupProfile);
+}
+
+// обработчик к форме "Редактирования профиля"
+formElementProfile.addEventListener('submit', handlePopupProfile);
+
+// другие обработчики событий
+editButton.addEventListener('click', () => openProfilePopup(popupProfile));
+addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
+
+popupCloseProfile.addEventListener('click', () => closePopup(popupProfile));
+popupCloseImage.addEventListener('click', () => closePopup(popupImage));
+popupCloseAddCard.addEventListener('click', function () {
+  closePopup(popupAddCard);
+  cleanInputPopup(formInputCardName, formInputCardLink);
+});
+
+
+// функция создания карточки с фото, она принимает объект с данными карточки,
+// навешивает обработчики и возвращает созданную карточку
 function createCard(itemArr) {
   const cardTemplate = document.querySelector('#card').content;
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardImg = cardElement.querySelector('.element__pic');
   const cardTitle = cardElement.querySelector('.element__title');
+  const cardLike = cardElement.querySelector('.element__like');
+  const cardDelete = cardElement.querySelector('.element__trash');
 
   cardTitle.textContent = itemArr.name;
   cardImg.src = itemArr.link;
   cardImg.alt = (`Фото ${itemArr.name}`);
 
+  // обработчик события - лайк на карточке
+  cardLike.addEventListener('click', function (evt) {
+    evt.target.classList.toggle('element__like_active');
+  });
+
+  // обработчик события - удаление карточки
+  cardDelete.addEventListener('click', function () {
+    const containerItem = cardDelete.closest('.element');
+    containerItem.remove();
+  });
+
+  // обработчик события - открытие картинки в большом размере
+  cardImg.addEventListener('click', function () {
+    showPopup(popupImage);
+    popupImageTitle.textContent = cardTitle.textContent;
+    popupBigPhoto.src = cardImg.src;
+    popupBigPhoto.alt = cardImg.alt;
+  });
+
   return cardElement;
 }
-
 
 //на вход получаем объект из массива, с каждым объектом создаем DOM элемент картчоки и вставляем полученный элемент в контейнер карточек
 initialCards.forEach(function (item) {
   const newCard = createCard(item);
-  // console.log (createCard(item));
-  cardContainer.prepend(newCard);
+  cardContainer.append(newCard);
 })
 
+
+// функция добавления новых карточек от пользователя
+function handlePopupAddCard(evt) {
+  evt.preventDefault();
+
+  const newObject = {
+    name: formInputCardName.value,
+    link: formInputCardLink.value
+  }
+
+  //создаем карточку по данным от пользователя и вставляем ее вначало контейнера
+  cardContainer.prepend( createCard(newObject) );
+
+  //очищаем значения полей ввода
+  cleanInputPopup(formInputCardName, formInputCardLink);
+
+  closePopup(popupAddCard);
+};
+
+//обработчик к форме "Добавление карточки"
+formElementAddCard.addEventListener('submit', handlePopupAddCard);
+
+
+// Дополнительно
+//функция обработки клика за пределами области popup__container
+function handlePopupClick(evt) {
+  if (evt.target.classList.contains('popup')){
+    closePopup(evt.target);
+  }
+}
+
+popupProfile.addEventListener('mousedown', handlePopupClick);
+popupAddCard.addEventListener('mousedown', handlePopupClick);
+popupImage.addEventListener('mousedown', handlePopupClick);
