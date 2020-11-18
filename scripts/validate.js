@@ -40,7 +40,7 @@ function checkInputValidity(formElement, inputElement, obj) {
 // Она принимает массив полей формы и возвращает true, если в нём хотя бы одно поле не валидно, и false, если все валидны.
 function hasInvalidInput(inputList) {
   return inputList.some(inputElement => {
-    return !inputElement.validity.valid;
+    return !inputElement.validity.valid && !inputElement.value.length > 0;
   })
 }
 
@@ -89,23 +89,18 @@ function enableValidation(obj) {
 
 function resetValidationState (typePopup, obj) {
   const form = typePopup.querySelector(obj.formSelector);
-   if (form) {
-     const arrInputs = Array.from(form.querySelectorAll(obj.inputSelector));
-     const buttonElement = form.querySelector(obj.submitButtonSelector);
 
-     if (arrInputs.every(inputElement => inputElement.value.length > 0)) {
-      buttonElement.removeAttribute('disabled');
-      buttonElement.classList.remove(obj.inactiveButtonClass);
-     } else {
-      buttonElement.setAttribute('disabled', true);
-      buttonElement.classList.add(obj.inactiveButtonClass);
-     }
+  if (form) {
+    const arrInputs = Array.from(form.querySelectorAll(obj.inputSelector));
+    const buttonElement = form.querySelector(obj.submitButtonSelector);
 
-     arrInputs.forEach((inputElement) => {
-       hideInputError(form, inputElement, obj)
-      })
-    }
-    return;
+    toggleButtonState(arrInputs, buttonElement, obj)
+
+    arrInputs.forEach((inputElement) => {
+      hideInputError(form, inputElement, obj);
+    })
+  }
+  return;
 }
 
 
