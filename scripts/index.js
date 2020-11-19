@@ -72,8 +72,9 @@ function showPopup(typePopup) {
 function closePopup(typePopup) {
     typePopup.classList.remove('popup_opened');
 
-    if (typePopup.querySelector('.popup__form')) {
-      typePopup.querySelector('.popup__form').reset();
+    const popupForm = typePopup.querySelector('.popup__form');
+    if (popupForm) {
+      popupForm.reset();
     }
 }
 
@@ -91,31 +92,10 @@ function createCard(itemArr) {
 
   const cardImg = cardElement.querySelector('.element__pic');
   const cardTitle = cardElement.querySelector('.element__title');
-  const cardLike = cardElement.querySelector('.element__like');
-  const cardDelete = cardElement.querySelector('.element__trash');
 
   cardTitle.textContent = itemArr.name;
   cardImg.src = itemArr.link;
   cardImg.alt = (`Фото ${itemArr.name}`);
-
-  // обработчик события - лайк на карточке
-  cardLike.addEventListener('click', function (evt) {
-    evt.target.classList.toggle('element__like_active');
-  });
-
-  // обработчик события - удаление карточки
-  cardDelete.addEventListener('click', function () {
-    const containerItem = cardDelete.closest('.element');
-    containerItem.remove();
-  });
-
-  // обработчик события - открытие картинки в большом размере
-  cardImg.addEventListener('click', function () {
-    showPopup(popupImage);
-    popupImageTitle.textContent = cardTitle.textContent;
-    bigPhotoPopupImage.src = cardImg.src;
-    bigPhotoPopupImage.alt = cardImg.alt;
-  });
 
   return cardElement;
 }
@@ -141,11 +121,14 @@ function handlePopupClick(evt) {
   }
 }
 
+
 //функция обработки нажатия клавиши Esc
 function handleEscDown(evt) {
   if (evt.key === 'Escape' && document.querySelector('.popup_opened')) {
     closePopup(document.querySelector('.popup_opened'));
   }
+
+  document.removeEventListener('click', handleEscDown);
 }
 
 
@@ -167,18 +150,54 @@ editButton.addEventListener('click', function() {
   showPopup(popupProfile);
 })
 
-popupCloseProfile.addEventListener('click', () => closePopup(popupProfile));
-popupCloseImage.addEventListener('click', () => closePopup(popupImage));
-popupCloseAddCard.addEventListener('click', () => closePopup(popupAddCard));
 
-popupProfile.addEventListener('mousedown', handlePopupClick);
-popupAddCard.addEventListener('mousedown', handlePopupClick);
-popupImage.addEventListener('mousedown', handlePopupClick);
 
-//обработчик Esc для закрытия попапа
+// popupCloseProfile.addEventListener('click', () => closePopup(popupProfile));
+// popupCloseImage.addEventListener('click', () => closePopup(popupImage));
+// popupCloseAddCard.addEventListener('click', () => closePopup(popupAddCard));
+
+Array.from(document.querySelectorAll('.popup__close')).forEach(closeBtn => {
+  closeBtn.addEventListener('click', () => closePopup(closeBtn.closest('.popup')));
+})
+
+// popupProfile.addEventListener('mousedown', handlePopupClick);
+// popupAddCard.addEventListener('mousedown', handlePopupClick);
+// popupImage.addEventListener('mousedown', handlePopupClick);
+
+Array.from(document.querySelectorAll('.popup')).forEach(popup => {
+  popup.addEventListener('mousedown', handlePopupClick);
+})
+
+
+//обработчик нажатия на Esc для закрытия попапа
 document.addEventListener('keydown', handleEscDown);
 
 
+
+//обработчик кнопки лайк на карточке
+cardContainer.addEventListener('click', evt => {
+  if (evt.target.classList.contains('element__like')) {
+    evt.target.classList.toggle('element__like_active');
+  }
+});
+
+//обработчик события - удаление карточки
+cardContainer.addEventListener('click', evt => {
+  if (evt.target.classList.contains('element__trash')) {
+    const containerItem = evt.target.closest('.element');
+    containerItem.remove();
+  }
+});
+
+//обработчик события - открытие картинки в большом размере
+cardContainer.addEventListener('click', evt => {
+  if (evt.target.classList.contains('element__pic')) {
+    showPopup(popupImage);
+    popupImageTitle.textContent = evt.target.closest('.element').querySelector('.element__title').textContent;
+    bigPhotoPopupImage.src = evt.target.src;
+    bigPhotoPopupImage.alt = evt.target.alt;
+  }
+});
 
 
 
@@ -187,6 +206,7 @@ initialCards.forEach(function (item) {
   const newCard = createCard(item);
   cardContainer.append(newCard);
 })
+
 
 
 
