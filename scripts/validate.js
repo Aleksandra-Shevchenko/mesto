@@ -10,7 +10,10 @@ const validationObject = {
   errorClass: 'popup__input-error_active',
 }
 
+
+
 // --- ФУНКЦИИ ---
+
 //функция появления сообщения об ошибке
 function showInputError(formElement, inputElement, errorMessage, obj) {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
@@ -38,14 +41,12 @@ function checkInputValidity(formElement, inputElement, obj) {
   }
 }
 
-
 //функция проверки на невалидные поля
 function hasInvalidInput(inputList) {
   return inputList.some(inputElement => {
     return !inputElement.validity.valid;
   })
 }
-
 
 //функция включения/выключения кнопки submit в форме
 function toggleButtonState(inputList, buttonElement, obj) {
@@ -57,7 +58,6 @@ function toggleButtonState(inputList, buttonElement, obj) {
     buttonElement.classList.remove(obj.inactiveButtonClass);
   }
 }
-
 
 //функция добавления слушателей для каждого поля ввода
 function setEventListeners(formElement, obj) {
@@ -74,7 +74,6 @@ function setEventListeners(formElement, obj) {
   });
 }
 
-
 //функция включения валидации всех форм
 function enableValidation(obj) {
   const formList = Array.from(document.querySelectorAll(obj.formSelector));
@@ -84,8 +83,7 @@ function enableValidation(obj) {
   });
 }
 
-
-//функция сброса проверки
+//функция сброса результатов проверки
 function resetValidationState (typePopup, obj) {
   const form = typePopup.querySelector(obj.formSelector);
 
@@ -104,5 +102,6 @@ function resetValidationState (typePopup, obj) {
 
 
 
+// --- ВЫЗОВ ФУНКЦИЙ ---
 
 enableValidation(validationObject);

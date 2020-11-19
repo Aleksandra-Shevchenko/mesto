@@ -60,7 +60,7 @@ const popupCloseImage = popupImage.querySelector('.popup__close');
 
 
 
-// --- ФУНКЦИИ---
+// --- ФУНКЦИИ ---
 
 // функция открытия попапа
 function showPopup(typePopup) {
@@ -100,7 +100,6 @@ function createCard(itemArr) {
   return cardElement;
 }
 
-
 // функция добавления новых карточек от пользователя
 function handlePopupAddCard(evt) {
   evt.preventDefault();
@@ -113,7 +112,6 @@ function handlePopupAddCard(evt) {
   closePopup(popupAddCard);
 }
 
-
 //функция обработки клика за пределами области popup__container
 function handlePopupClick(evt) {
   if (evt.target.classList.contains('popup')) {
@@ -121,55 +119,59 @@ function handlePopupClick(evt) {
   }
 }
 
-
 //функция обработки нажатия клавиши Esc
 function handleEscDown(evt) {
   if (evt.key === 'Escape' && document.querySelector('.popup_opened')) {
     closePopup(document.querySelector('.popup_opened'));
   }
-
   document.removeEventListener('click', handleEscDown);
 }
 
 
 
-// --- СЛУШАТЕЛИ СОБЫТИЙ---
+// --- СЛУШАТЕЛИ СОБЫТИЙ ---
 
-//обработчик к форме "Редактирования профиля"
+//обработчик к сабмиту формы "Редактирования профиля"
 formElementProfile.addEventListener('submit', handlePopupProfile);
 
-//обработчик к форме "Добавление карточки"
+//обработчик к сабмиту формы "Добавление карточки"
 formElementAddCard.addEventListener('submit', handlePopupAddCard);
 
-// другие обработчики событий
-addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
 
+
+//обработчик клика открытия попапа "Редактирования профиля"
 editButton.addEventListener('click', function() {
   profileNameInput.value = profileNameElement.textContent;
   profileJobInput.value = profileJobElement.textContent;
   showPopup(popupProfile);
-})
+});
+
+//oбработчик клика открытия попапа "Добавление карточки"
+addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
+
+//обработчик клика открытия попапа с картинкой в большом размере
+cardContainer.addEventListener('click', evt => {
+  if (evt.target.classList.contains('element__pic')) {
+    showPopup(popupImage);
+    popupImageTitle.textContent = evt.target.closest('.element').querySelector('.element__title').textContent;
+    bigPhotoPopupImage.src = evt.target.src;
+    bigPhotoPopupImage.alt = evt.target.alt;
+  }
+});
 
 
 
-// popupCloseProfile.addEventListener('click', () => closePopup(popupProfile));
-// popupCloseImage.addEventListener('click', () => closePopup(popupImage));
-// popupCloseAddCard.addEventListener('click', () => closePopup(popupAddCard));
-
+//обработчик закрытия попапов по нажатию на "крестик"
 Array.from(document.querySelectorAll('.popup__close')).forEach(closeBtn => {
   closeBtn.addEventListener('click', () => closePopup(closeBtn.closest('.popup')));
 })
 
-// popupProfile.addEventListener('mousedown', handlePopupClick);
-// popupAddCard.addEventListener('mousedown', handlePopupClick);
-// popupImage.addEventListener('mousedown', handlePopupClick);
-
+//обработчик закрытия попапов по клику вне области формы
 Array.from(document.querySelectorAll('.popup')).forEach(popup => {
   popup.addEventListener('mousedown', handlePopupClick);
 })
 
-
-//обработчик нажатия на Esc для закрытия попапа
+//обработчик закрытия попапов по нажатию Esc
 document.addEventListener('keydown', handleEscDown);
 
 
@@ -189,17 +191,10 @@ cardContainer.addEventListener('click', evt => {
   }
 });
 
-//обработчик события - открытие картинки в большом размере
-cardContainer.addEventListener('click', evt => {
-  if (evt.target.classList.contains('element__pic')) {
-    showPopup(popupImage);
-    popupImageTitle.textContent = evt.target.closest('.element').querySelector('.element__title').textContent;
-    bigPhotoPopupImage.src = evt.target.src;
-    bigPhotoPopupImage.alt = evt.target.alt;
-  }
-});
 
 
+
+// --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 
 // вставляем элементы карточек в контейнер при загрузке страницы
 initialCards.forEach(function (item) {
