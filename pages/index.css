@@ -50,36 +50,15 @@
 @import url(../blocks/popup/_type/popup_type_image.css);
 
 
+@import url(../blocks/popup/__input/_type/popup__input_type_error.css);
+@import url(../blocks/popup/__input-error/popup__input-error.css);
+@import url(../blocks/popup/__input-error/_active/popup__input-error_active.css);
+@import url(../blocks/popup/__submit-btn/_inactive/popup__submit-btn_inactive.css);
 
 
-.popup__input_type_error {
-  border-bottom: 1px solid #FF0000;
-}
 
-.popup__input-error {
-  font-family: 'Inter';
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 1.25;
-  color: #FF0000;
-  padding: 5px 2px;
-  display: none;
-}
 
-.popup__input-error_active {
-  display: flex;
-}
 
-.popup__submit-btn_inactive {
-  background-color:  #E5E5E5;
-  opacity: 0.2;
-  color: #000;
-  border: 1px solid  #000;
-}
 
-.popup__submit-btn_inactive:hover {
-  background-color:  #E5E5E5;
-  opacity: 0.2;
-  color: #000;
-  border: 1px solid  #000;
-}
+
+

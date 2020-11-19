@@ -1,6 +1,6 @@
 .popup__container_type_image {
-  min-width: auto;
-  min-height: auto;
+  width: auto;
+  height: auto;
   padding: 0;
   margin: 0;
   border-radius: 0;

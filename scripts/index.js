@@ -60,6 +60,7 @@ const popupCloseImage = popupImage.querySelector('.popup__close');
 
 
 
+// --- ФУНКЦИИ---
 
 // функция открытия попапа
 function showPopup(typePopup) {
@@ -69,7 +70,11 @@ function showPopup(typePopup) {
 
 // функция закрытия попапа
 function closePopup(typePopup) {
-  typePopup.classList.remove('popup_opened');
+    typePopup.classList.remove('popup_opened');
+
+    if (typePopup.querySelector('.popup__form')) {
+      typePopup.querySelector('.popup__form').reset();
+    }
 }
 
 // функция редактирования профиля
@@ -115,6 +120,7 @@ function createCard(itemArr) {
   return cardElement;
 }
 
+
 // функция добавления новых карточек от пользователя
 function handlePopupAddCard(evt) {
   evt.preventDefault();
@@ -124,11 +130,10 @@ function handlePopupAddCard(evt) {
   }
 
   cardContainer.prepend( createCard(newObject) );
-  formElementAddCard.reset();
   closePopup(popupAddCard);
 }
 
-// Дополнительно
+
 //функция обработки клика за пределами области popup__container
 function handlePopupClick(evt) {
   if (evt.target.classList.contains('popup')) {
@@ -136,41 +141,52 @@ function handlePopupClick(evt) {
   }
 }
 
+//функция обработки нажатия клавиши Esc
+function handleEscDown(evt) {
+  if (evt.key === 'Escape' && document.querySelector('.popup_opened')) {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
 
-// обработчик к форме "Редактирования профиля"
+
+
+// --- СЛУШАТЕЛИ СОБЫТИЙ---
+
+//обработчик к форме "Редактирования профиля"
 formElementProfile.addEventListener('submit', handlePopupProfile);
 
-// //обработчик к форме "Добавление карточки"
+//обработчик к форме "Добавление карточки"
 formElementAddCard.addEventListener('submit', handlePopupAddCard);
 
 // другие обработчики событий
 addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
 
-
 editButton.addEventListener('click', function() {
   profileNameInput.value = profileNameElement.textContent;
   profileJobInput.value = profileJobElement.textContent;
   showPopup(popupProfile);
-});
+})
 
 popupCloseProfile.addEventListener('click', () => closePopup(popupProfile));
 popupCloseImage.addEventListener('click', () => closePopup(popupImage));
-popupCloseAddCard.addEventListener('click', function() {
-  formElementAddCard.reset();
-  closePopup(popupAddCard);
-});
+popupCloseAddCard.addEventListener('click', () => closePopup(popupAddCard));
 
 popupProfile.addEventListener('mousedown', handlePopupClick);
 popupAddCard.addEventListener('mousedown', handlePopupClick);
 popupImage.addEventListener('mousedown', handlePopupClick);
+
+//обработчик Esc для закрытия попапа
+document.addEventListener('keydown', handleEscDown);
+
+
+
 
 
 // вставляем элементы карточек в контейнер при загрузке страницы
 initialCards.forEach(function (item) {
   const newCard = createCard(item);
   cardContainer.append(newCard);
-});
-
+})
 
 
 

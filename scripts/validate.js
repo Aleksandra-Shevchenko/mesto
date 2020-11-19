@@ -1,6 +1,6 @@
-// Проектная работа №6
+//СКРИПТ ВАЛИДАЦИИ ФОРМ
 
-// функция enableValidation, которая включает валидацию, принимает на вход объект параметров, а затем передаёт параметры вложенным функциям.
+//объект параметров для валидации форм
 const validationObject = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -10,7 +10,8 @@ const validationObject = {
   errorClass: 'popup__input-error_active',
 }
 
-
+// --- ФУНКЦИИ ---
+//функция появления сообщения об ошибке
 function showInputError(formElement, inputElement, errorMessage, obj) {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
 
@@ -19,6 +20,7 @@ function showInputError(formElement, inputElement, errorMessage, obj) {
   errorElement.classList.add(obj.errorClass);
 }
 
+//функция скрытия сообщения об ошибке
 function hideInputError(formElement, inputElement, obj) {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
 
@@ -27,6 +29,7 @@ function hideInputError(formElement, inputElement, obj) {
   errorElement.textContent = '';
 }
 
+//функция управления сообщениями об ошибках
 function checkInputValidity(formElement, inputElement, obj) {
   if(!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, obj);
@@ -36,16 +39,15 @@ function checkInputValidity(formElement, inputElement, obj) {
 }
 
 
-
-// Она принимает массив полей формы и возвращает true, если в нём хотя бы одно поле не валидно, и false, если все валидны.
+//функция проверки на невалидные поля
 function hasInvalidInput(inputList) {
   return inputList.some(inputElement => {
-    return !inputElement.validity.valid && !inputElement.value.length > 0;
+    return !inputElement.validity.valid;
   })
 }
 
 
-
+//функция включения/выключения кнопки submit в форме
 function toggleButtonState(inputList, buttonElement, obj) {
   if(hasInvalidInput(inputList)) {
     buttonElement.setAttribute('disabled', true);
@@ -57,7 +59,7 @@ function toggleButtonState(inputList, buttonElement, obj) {
 }
 
 
-
+//функция добавления слушателей для каждого поля ввода
 function setEventListeners(formElement, obj) {
   const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
   const buttonElement = formElement.querySelector(obj.submitButtonSelector);
@@ -73,7 +75,7 @@ function setEventListeners(formElement, obj) {
 }
 
 
-
+//функция включения валидации всех форм
 function enableValidation(obj) {
   const formList = Array.from(document.querySelectorAll(obj.formSelector));
 
@@ -83,26 +85,22 @@ function enableValidation(obj) {
 }
 
 
-
-
-// Проще всего сделать функцию resetValidationState, которая принимает на вход форму и конфиг валидации, очищает ошибки валидации у всех полей ввода, устанавливает состояние кнопки. И вызывать эту функцию при открытии попапа
-
+//функция сброса проверки
 function resetValidationState (typePopup, obj) {
   const form = typePopup.querySelector(obj.formSelector);
 
   if (form) {
-    const arrInputs = Array.from(form.querySelectorAll(obj.inputSelector));
+    const inputsArr = Array.from(form.querySelectorAll(obj.inputSelector));
     const buttonElement = form.querySelector(obj.submitButtonSelector);
 
-    toggleButtonState(arrInputs, buttonElement, obj)
+    toggleButtonState(inputsArr, buttonElement, obj);
 
-    arrInputs.forEach((inputElement) => {
+    inputsArr.forEach((inputElement) => {
       hideInputError(form, inputElement, obj);
     })
   }
   return;
 }
-
 
 
 
