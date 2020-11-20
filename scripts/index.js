@@ -1,3 +1,14 @@
+//объект параметров для валидации форм
+const validationObject = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__submit-btn',
+  inactiveButtonClass: 'popup__submit-btn_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+};
+
+//массив отображаемых карточек при загрузке страницы
 const initialCards = [
   {
     name: 'Архыз',
@@ -39,14 +50,12 @@ const addPhotoButton = container.querySelector('.profile__add-btn');
 
 //элементы попапа для редактирования профайла
 const popupProfile = document.querySelector('.popup_type_edit');
-const popupCloseProfile = popupProfile.querySelector('.popup__close');
 const formElementProfile = popupProfile.querySelector('.popup__form');
 const profileNameInput = popupProfile.querySelector('.popup__input_text_name');
 const profileJobInput = popupProfile.querySelector('.popup__input_text_job');
 
 //элементы попапа для добавления фото
 const popupAddCard = document.querySelector('.popup_type_add-card');
-const popupCloseAddCard = popupAddCard.querySelector('.popup__close');
 const formElementAddCard = popupAddCard.querySelector('.popup__form');
 const formInputCardName = popupAddCard.querySelector('.popup__input_add-card_name');
 const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_link');
@@ -55,8 +64,6 @@ const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_lin
 const popupImage = document.querySelector('.popup_type_image');
 const bigPhotoPopupImage = popupImage.querySelector('.popup__photo');
 const popupImageTitle = popupImage.querySelector('.popup__photo-title');
-const popupCloseImage = popupImage.querySelector('.popup__close');
-
 
 
 
@@ -66,16 +73,18 @@ const popupCloseImage = popupImage.querySelector('.popup__close');
 function showPopup(typePopup) {
   typePopup.classList.add('popup_opened');
   resetValidationState (typePopup, validationObject);
+  document.addEventListener('keydown', handleEscDown);
 }
 
 // функция закрытия попапа
 function closePopup(typePopup) {
-    typePopup.classList.remove('popup_opened');
+  typePopup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleEscDown);
 
-    const popupForm = typePopup.querySelector('.popup__form');
-    if (popupForm) {
-      popupForm.reset();
-    }
+  const popupForm = typePopup.querySelector('.popup__form');
+  if (popupForm) {
+    popupForm.reset();
+  }
 }
 
 // функция редактирования профиля
@@ -95,7 +104,7 @@ function createCard(itemArr) {
 
   cardTitle.textContent = itemArr.name;
   cardImg.src = itemArr.link;
-  cardImg.alt = (`Фото ${itemArr.name}`);
+  cardImg.alt = `Фото ${itemArr.name}`;
 
   return cardElement;
 }
@@ -105,8 +114,8 @@ function handlePopupAddCard(evt) {
   evt.preventDefault();
   const newObject = {
     name: formInputCardName.value,
-    link: formInputCardLink.value
-  }
+    link: formInputCardLink.value,
+  };
 
   cardContainer.prepend( createCard(newObject) );
   closePopup(popupAddCard);
@@ -121,10 +130,10 @@ function handlePopupClick(evt) {
 
 //функция обработки нажатия клавиши Esc
 function handleEscDown(evt) {
-  if (evt.key === 'Escape' && document.querySelector('.popup_opened')) {
-    closePopup(document.querySelector('.popup_opened'));
+  const popupOpened = document.querySelector('.popup_opened');
+  if (evt.key === 'Escape' && popupOpened) {
+    closePopup(popupOpened);
   }
-  document.removeEventListener('click', handleEscDown);
 }
 
 
@@ -164,15 +173,12 @@ cardContainer.addEventListener('click', evt => {
 //обработчик закрытия попапов по нажатию на "крестик"
 Array.from(document.querySelectorAll('.popup__close')).forEach(closeBtn => {
   closeBtn.addEventListener('click', () => closePopup(closeBtn.closest('.popup')));
-})
+});
 
 //обработчик закрытия попапов по клику вне области формы
 Array.from(document.querySelectorAll('.popup')).forEach(popup => {
   popup.addEventListener('mousedown', handlePopupClick);
-})
-
-//обработчик закрытия попапов по нажатию Esc
-document.addEventListener('keydown', handleEscDown);
+});
 
 
 
@@ -193,15 +199,16 @@ cardContainer.addEventListener('click', evt => {
 
 
 
-
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 
-// вставляем элементы карточек в контейнер при загрузке страницы
+//вставляем элементы карточек в контейнер при загрузке страницы
 initialCards.forEach(function (item) {
   const newCard = createCard(item);
   cardContainer.append(newCard);
-})
+});
 
+//запускаем валидацию форм
+enableValidation(validationObject);
 
 
 

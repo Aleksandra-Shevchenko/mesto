@@ -1,17 +1,5 @@
 //СКРИПТ ВАЛИДАЦИИ ФОРМ
 
-//объект параметров для валидации форм
-const validationObject = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__submit-btn',
-  inactiveButtonClass: 'popup__submit-btn_inactive',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active',
-}
-
-
-
 // --- ФУНКЦИИ ---
 
 //функция появления сообщения об ошибке
@@ -34,10 +22,10 @@ function hideInputError(formElement, inputElement, obj) {
 
 //функция управления сообщениями об ошибках
 function checkInputValidity(formElement, inputElement, obj) {
-  if(!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, obj);
-  } else {
+  if(inputElement.validity.valid) {
     hideInputError(formElement, inputElement, obj);
+  } else {
+    showInputError(formElement, inputElement, inputElement.validationMessage, obj);
   }
 }
 
@@ -45,7 +33,7 @@ function checkInputValidity(formElement, inputElement, obj) {
 function hasInvalidInput(inputList) {
   return inputList.some(inputElement => {
     return !inputElement.validity.valid;
-  })
+  });
 }
 
 //функция включения/выключения кнопки submit в форме
@@ -95,13 +83,7 @@ function resetValidationState (typePopup, obj) {
 
     inputsArr.forEach((inputElement) => {
       hideInputError(form, inputElement, obj);
-    })
+    });
   }
-  return;
 }
 
-
-
-// --- ВЫЗОВ ФУНКЦИЙ ---
-
-enableValidation(validationObject);
