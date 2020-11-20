@@ -130,9 +130,8 @@ function handlePopupClick(evt) {
 
 //функция обработки нажатия клавиши Esc
 function handleEscDown(evt) {
-  const popupOpened = document.querySelector('.popup_opened');
-  if (evt.key === 'Escape' && popupOpened) {
-    closePopup(popupOpened);
+  if (evt.key === 'Escape') {
+    closePopup(document.querySelector('.popup_opened'));
   }
 }
 
