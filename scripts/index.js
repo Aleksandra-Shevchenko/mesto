@@ -116,20 +116,21 @@ class Card {
     this._cardSelector = cardSelector;
     this._name = data.name;
     this._link = data.link;
-
   }
 
   _getTemplate() {
     const cardElement = document
     .querySelector(this._cardSelector)
     .content
-    .cloneNode(true)
+    .querySelector('.element')
+    .cloneNode(true);
 
     return cardElement;
   }
 
   generateCard() {
     this._element = this._getTemplate();
+    this._setEventListeners();
 
     this._element.querySelector('.element__pic').src = this._link;
     this._element.querySelector('.element__pic').alt =`Фото ${this._name}`;
@@ -139,8 +140,44 @@ class Card {
   }
 
 
+  _setEventListeners() {
+    this._element.querySelector('.element__pic').addEventListener('click', () => {
+      this._handleOpenPopup();
+    });
+
+
+    this._element.querySelector('.element__like').addEventListener('click', () => {
+      this._handleLikeCard();
+    });
+
+    this._element.querySelector('.element__trash').addEventListener('click', () => {
+      this._handleDeleteCard();
+    });
+  }
+
+  _handleOpenPopup() {
+    showPopup(popupImage);
+    popupImageTitle.textContent = this._name;
+    bigPhotoPopupImage.src = this._link;
+    bigPhotoPopupImage.alt = `Фото ${this._name}`;
+  }
+
+
+  _handleLikeCard() {
+    this._element.querySelector('.element__like').classList.toggle('element__like_active');
+  }
+
+  _handleDeleteCard() {
+    this._element.remove();
+  }
+
+
 
 }
+
+
+
+
 
 
 
@@ -150,21 +187,6 @@ initialCards.forEach(item => {
 
   document.querySelector('.elements').append(newCard);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -223,15 +245,15 @@ editButton.addEventListener('click', function() {
 //oбработчик клика открытия попапа "Добавление карточки"
 addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
 
-// обработчик клика открытия попапа с картинкой в большом размере
-cardContainer.addEventListener('click', evt => {
-  if (evt.target.classList.contains('element__pic')) {
-    showPopup(popupImage);
-    popupImageTitle.textContent = evt.target.closest('.element').querySelector('.element__title').textContent;
-    bigPhotoPopupImage.src = evt.target.src;
-    bigPhotoPopupImage.alt = evt.target.alt;
-  }
-});
+//обработчик клика открытия попапа с картинкой в большом размере
+// cardContainer.addEventListener('click', evt => {
+//   if (evt.target.classList.contains('element__pic')) {
+//     showPopup(popupImage);
+//     popupImageTitle.textContent = evt.target.closest('.element').querySelector('.element__title').textContent;
+//     bigPhotoPopupImage.src = evt.target.src;
+//     bigPhotoPopupImage.alt = evt.target.alt;
+//   }
+// });
 
 
 
@@ -247,20 +269,20 @@ Array.from(document.querySelectorAll('.popup')).forEach(popup => {
 
 
 
-//обработчик кнопки лайк на карточке
-cardContainer.addEventListener('click', evt => {
-  if (evt.target.classList.contains('element__like')) {
-    evt.target.classList.toggle('element__like_active');
-  }
-});
+// обработчик кнопки лайк на карточке
+// cardContainer.addEventListener('click', evt => {
+//   if (evt.target.classList.contains('element__like')) {
+//     evt.target.classList.toggle('element__like_active');
+//   }
+// });
 
 //обработчик события - удаление карточки
-cardContainer.addEventListener('click', evt => {
-  if (evt.target.classList.contains('element__trash')) {
-    const containerItem = evt.target.closest('.element');
-    containerItem.remove();
-  }
-});
+// cardContainer.addEventListener('click', evt => {
+//   if (evt.target.classList.contains('element__trash')) {
+//     const containerItem = evt.target.closest('.element');
+//     containerItem.remove();
+//   }
+// });
 
 
 
