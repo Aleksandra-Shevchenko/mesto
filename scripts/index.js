@@ -96,18 +96,84 @@ function handlePopupProfile(evt) {
 }
 
 // функция создания карточки с фото
-function createCard(itemArr) {
-  const cardElement = cardTemplate.cloneNode(true);
+// function createCard(itemArr) {
+//   const cardElement = cardTemplate.cloneNode(true);
 
-  const cardImg = cardElement.querySelector('.element__pic');
-  const cardTitle = cardElement.querySelector('.element__title');
+//   const cardImg = cardElement.querySelector('.element__pic');
+//   const cardTitle = cardElement.querySelector('.element__title');
 
-  cardTitle.textContent = itemArr.name;
-  cardImg.src = itemArr.link;
-  cardImg.alt = `Фото ${itemArr.name}`;
+//   cardTitle.textContent = itemArr.name;
+//   cardImg.src = itemArr.link;
+//   cardImg.alt = `Фото ${itemArr.name}`;
 
-  return cardElement;
+//   return cardElement;
+// }
+
+
+
+class Card {
+  constructor(data, cardSelector) {
+    this._cardSelector = cardSelector;
+    this._name = data.name;
+    this._link = data.link;
+
+  }
+
+  _getTemplate() {
+    const cardElement = document
+    .querySelector(this._cardSelector)
+    .content
+    .cloneNode(true)
+
+    return cardElement;
+  }
+
+  generateCard() {
+    this._element = this._getTemplate();
+
+    this._element.querySelector('.element__pic').src = this._link;
+    this._element.querySelector('.element__pic').alt =`Фото ${this._name}`;
+    this._element.querySelector('.element__title').textContent = this._name;
+
+    return this._element;
+  }
+
+
+
 }
+
+
+
+initialCards.forEach(item => {
+  const card = new Card(item, '#card');
+  const newCard= card.generateCard();
+
+  document.querySelector('.elements').append(newCard);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // функция добавления новых карточек от пользователя
 function handlePopupAddCard(evt) {
@@ -157,7 +223,7 @@ editButton.addEventListener('click', function() {
 //oбработчик клика открытия попапа "Добавление карточки"
 addPhotoButton.addEventListener('click', () => showPopup(popupAddCard));
 
-//обработчик клика открытия попапа с картинкой в большом размере
+// обработчик клика открытия попапа с картинкой в большом размере
 cardContainer.addEventListener('click', evt => {
   if (evt.target.classList.contains('element__pic')) {
     showPopup(popupImage);
@@ -201,10 +267,10 @@ cardContainer.addEventListener('click', evt => {
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 
 //вставляем элементы карточек в контейнер при загрузке страницы
-initialCards.forEach(function (item) {
-  const newCard = createCard(item);
-  cardContainer.append(newCard);
-});
+// initialCards.forEach(function (item) {
+//   const newCard = createCard(item);
+//   cardContainer.append(newCard);
+// });
 
 //запускаем валидацию форм
 enableValidation(validationObject);
