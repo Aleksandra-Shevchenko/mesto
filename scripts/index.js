@@ -1,4 +1,5 @@
-import {Card} from './card.js'
+import { Card } from './Card.js';
+import { FormValidator } from './FormValidator.js';
 
 
 //объект параметров для валидации форм
@@ -41,7 +42,6 @@ const initialCards = [
 
 
 const cardContainer = document.querySelector('.elements');
-const cardTemplate = document.querySelector('#card').content;
 
 const container = document.querySelector('.container');
 
@@ -63,10 +63,6 @@ const formElementAddCard = popupAddCard.querySelector('.popup__form');
 const formInputCardName = popupAddCard.querySelector('.popup__input_add-card_name');
 const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_link');
 
-// элементы попапа открытия изображения в большом формате
-// const popupImage = document.querySelector('.popup_type_image');
-// const bigPhotoPopupImage = popupImage.querySelector('.popup__photo');
-// const popupImageTitle = popupImage.querySelector('.popup__photo-title');
 
 
 
@@ -75,7 +71,12 @@ const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_lin
 // функция открытия попапа
 function showPopup(typePopup) {
   typePopup.classList.add('popup_opened');
-  resetValidationState (typePopup, validationObject);
+
+  if(typePopup.querySelector('.popup__form')){
+    const form = new FormValidator(validationObject, typePopup);
+    form.enableValidation();
+  }
+
   document.addEventListener('keydown', handleEscDown);
 }
 
@@ -185,11 +186,12 @@ initialCards.forEach(item => {
 });
 
 
-//запускаем валидацию форм
-enableValidation(validationObject);
+// Array.from(document.querySelectorAll('.popup__form')).forEach(item => {
+//   const form = new FormValidator(validationObject, item);
+//   form.enableValidation();
+//   form.resetValidationState(item);
 
-
-
+// });
 
 
 
