@@ -71,10 +71,9 @@ const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_lin
 // функция открытия попапа
 function showPopup(typePopup) {
   typePopup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleEscDown);
 
   createElementFormValidator(typePopup);
-
-  document.addEventListener('keydown', handleEscDown);
 }
 
 // функция закрытия попапа

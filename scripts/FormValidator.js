@@ -1,17 +1,13 @@
-//СКРИПТ ВАЛИДАЦИИ ФОРМ
-
-// const validationObject = {
-//   formSelector: '.popup__form',
-//   inputSelector: '.popup__input',
-//   submitButtonSelector: '.popup__submit-btn',
-//   inactiveButtonClass: 'popup__submit-btn_inactive',
-//   inputErrorClass: 'popup__input_type_error',
-//   errorClass: 'popup__input-error_active',
-// };
+//КЛАСС ВАЛИДАЦИИ ФОРМ
 
 export class FormValidator {
   constructor(config, form) {
-    this._obj = config;
+    this._formSelector = config.formSelector;
+    this._inputSelector = config.inputSelector;
+    this._submitBtnSelector = config.submitButtonSelector;
+    this._inactiveButtonClass = config.inactiveButtonClass;
+    this._inputErrorClass = config.inputErrorClass;
+    this._errorClass = config.errorClass;
     this._formElement = form;
   }
 
@@ -19,17 +15,17 @@ export class FormValidator {
   _showInputError(inputElement, errorMessage) {
     const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
 
-    inputElement.classList.add(this._obj.inputErrorClass);
+    inputElement.classList.add(this._inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(this._obj.errorClass);
+    errorElement.classList.add(this._errorClass);
   }
 
   //метод скрытия сообщения об ошибке
   _hideInputError(inputElement) {
     const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
 
-    inputElement.classList.remove(this._obj.inputErrorClass);
-    errorElement.classList.remove(this._obj.errorClass);
+    inputElement.classList.remove(this._inputErrorClass);
+    errorElement.classList.remove(this._errorClass);
     errorElement.textContent = '';
   }
 
@@ -55,17 +51,17 @@ export class FormValidator {
   _toggleButtonState(inputList, buttonElement) {
     if(this._hasInvalidInput(inputList)) {
       buttonElement.setAttribute('disabled', true);
-      buttonElement.classList.add(this._obj.inactiveButtonClass);
+      buttonElement.classList.add(this._inactiveButtonClass);
     } else {
       buttonElement.removeAttribute('disabled');
-      buttonElement.classList.remove(this._obj.inactiveButtonClass);
+      buttonElement.classList.remove(this._inactiveButtonClass);
     }
   }
 
   //метод добавления слушателей для каждого поля ввода
   _setEventListeners() {
-    const inputList = Array.from(this._formElement.querySelectorAll(this._obj.inputSelector));
-    const buttonElement = this._formElement.querySelector(this._obj.submitButtonSelector);
+    const inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
+    const buttonElement = this._formElement.querySelector(this._submitBtnSelector);
     this._toggleButtonState(inputList, buttonElement);
 
     inputList.forEach((inputElement) => {
@@ -79,9 +75,9 @@ export class FormValidator {
 
   //метод сброса результатов проверки
   _resetValidationState () {
-    const form = this._formElement.querySelector(this._obj.formSelector);
-    const inputsArr = Array.from(form.querySelectorAll(this._obj.inputSelector));
-    const buttonElement = form.querySelector(this._obj.submitButtonSelector);
+    const form = this._formElement.querySelector(this._formSelector);
+    const inputsArr = Array.from(form.querySelectorAll(this._inputSelector));
+    const buttonElement = form.querySelector(this._submitBtnSelector);
 
     this._toggleButtonState(inputsArr, buttonElement);
 
