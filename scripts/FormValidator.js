@@ -1,5 +1,14 @@
 //СКРИПТ ВАЛИДАЦИИ ФОРМ
 
+// const validationObject = {
+//   formSelector: '.popup__form',
+//   inputSelector: '.popup__input',
+//   submitButtonSelector: '.popup__submit-btn',
+//   inactiveButtonClass: 'popup__submit-btn_inactive',
+//   inputErrorClass: 'popup__input_type_error',
+//   errorClass: 'popup__input-error_active',
+// };
+
 export class FormValidator {
   constructor(config, form) {
     this._obj = config;

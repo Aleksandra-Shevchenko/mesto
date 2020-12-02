@@ -72,10 +72,7 @@ const formInputCardLink = popupAddCard.querySelector('.popup__input_add-card_lin
 function showPopup(typePopup) {
   typePopup.classList.add('popup_opened');
 
-  if(typePopup.querySelector('.popup__form')){
-    const form = new FormValidator(validationObject, typePopup);
-    form.enableValidation();
-  }
+  createElementFormValidator(typePopup);
 
   document.addEventListener('keydown', handleEscDown);
 }
@@ -138,6 +135,14 @@ function handleEscDown(evt) {
   }
 }
 
+//функция создания экземпляра класса FormValidator
+function createElementFormValidator(typePopup) {
+  if(typePopup.querySelector('.popup__form')){
+    const form = new FormValidator(validationObject, typePopup);
+    form.enableValidation();
+  }
+}
+
 
 
 // --- СЛУШАТЕЛИ СОБЫТИЙ ---
@@ -177,21 +182,11 @@ Array.from(document.querySelectorAll('.popup')).forEach(popup => {
 
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 
-//вставляем элементы карточек в контейнер при загрузке страницы
+//вставляем экземпляры карточек в контейнер при загрузке страницы
 initialCards.forEach(item => {
   const card = new Card(item, '#card', showPopupImage);
   const newCard = card.generateCard();
 
   document.querySelector('.elements').append(newCard);
 });
-
-
-// Array.from(document.querySelectorAll('.popup__form')).forEach(item => {
-//   const form = new FormValidator(validationObject, item);
-//   form.enableValidation();
-//   form.resetValidationState(item);
-
-// });
-
-
 
