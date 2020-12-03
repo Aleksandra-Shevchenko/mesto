@@ -21,7 +21,7 @@ import {
 
 import { FormValidator } from './FormValidator.js';
 
-import { Card } from './card.js';
+import { Card } from './Card.js';
 
 
 
