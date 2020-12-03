@@ -1,4 +1,4 @@
-//КЛАСС ВАЛИДАЦИИ ФОРМ
+// --- КЛАСС ВАЛИДАЦИИ ФОРМ ---
 
 export class FormValidator {
   constructor(config, form) {
@@ -73,8 +73,8 @@ export class FormValidator {
     });
   }
 
-  //метод сброса результатов проверки
-  _resetValidationState () {
+  //метод сброса результатов проверки формы
+  resetValidationState() {
     const form = this._formElement.querySelector(this._formSelector);
     const inputsArr = Array.from(form.querySelectorAll(this._inputSelector));
     const buttonElement = form.querySelector(this._submitBtnSelector);
@@ -89,6 +89,5 @@ export class FormValidator {
   //метод включения валидации
   enableValidation() {
     this._setEventListeners();
-    this._resetValidationState();
   }
 }

@@ -1,3 +1,4 @@
+// --- КЛАСС СОЗДАНИЯ КАРТОЧЕК ---
 
 export class Card {
   constructor(data, cardSelector, showFunction) {
@@ -21,8 +22,9 @@ export class Card {
     this._element = this._getTemplate();
     this._setEventListeners();
 
-    this._element.querySelector('.element__pic').src = this._link;
-    this._element.querySelector('.element__pic').alt =`Фото ${this._name}`;
+    const elementPic = this._element.querySelector('.element__pic');
+    elementPic.src = this._link;
+    elementPic.alt =`Фото ${this._name}`;
     this._element.querySelector('.element__title').textContent = this._name;
 
     return this._element;
@@ -50,6 +52,6 @@ export class Card {
 
   _handleDeleteCard() {
     this._element.remove();
+    this._element = '';
   }
-
 }
