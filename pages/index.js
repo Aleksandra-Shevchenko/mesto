@@ -5,6 +5,8 @@ import { Card } from "../components/Card.js";
 import { Section } from "../components/Section.js";
 import { Popup } from "../components/Popup.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
+import { PopupWithForm } from "../components/PopupWithForm.js";
+import { UserInfo } from "../components/UserInfo.js";
 
 const container = document.querySelector(".container");
 const cardContainer = container.querySelector(".elements");
@@ -45,7 +47,7 @@ const cardList = new Section(
   {
     items: initialCards,
     renderer: (cardItem) => {
-      const card = new Card(cardItem, "#card", handleCardClick);
+      const card = new Card({ data: cardItem, handleCardClick }, "#card");
       const newCard = card.generateCard();
 
       cardList.addItem(newCard);
@@ -57,16 +59,34 @@ const cardList = new Section(
 cardList.renderItems();
 
 
+const userInfo = new UserInfo({ selectorName: '.profile__title', selectorJob: '.profile__subtitle' })
 
-// const popupOne = new Popup('.popup_type_edit');
 
-// editButton.addEventListener("click", () => {
-//   popupOne.open()
-//   validFormPopupProfile.resetValidationState();
-// });
+
+
+const popupFormProfile = new PopupWithForm('.popup_type_edit', handlePopupProfile);
+popupFormProfile.setEventListeners();
+
+
+editButton.addEventListener("click", () => {
+
+  popupFormProfile.open(userInfo.getUserInfo());
+  console.log(userInfo.getUserInfo());
+
+  validFormPopupProfile.resetValidationState();
+});
+
+
+function handlePopupProfile(data) {
+  userInfo.setUserInfo({ name: data.popupName, job: data.popupJob })
+  popupFormProfile.close();
+}
+
+
 
 
 const popupWithImage = new PopupWithImage('.popup_type_image');
+popupWithImage.setEventListeners();
 
 function handleCardClick(title, link) {
   popupWithImage.open(title, link);
@@ -78,29 +98,29 @@ function handleCardClick(title, link) {
 // --- ФУНКЦИИ ---
 
 // функция открытия попапа
-function showPopup(typePopup) {
-  typePopup.classList.add("popup_opened");
-  document.addEventListener("keydown", handleEscDown);
-}
+// function showPopup(typePopup) {
+//   typePopup.classList.add("popup_opened");
+//   document.addEventListener("keydown", handleEscDown);
+// }
 
 // функция закрытия попапа
-function closePopup(typePopup) {
-  typePopup.classList.remove("popup_opened");
-  document.removeEventListener("keydown", handleEscDown);
+// function closePopup(typePopup) {
+//   typePopup.classList.remove("popup_opened");
+//   document.removeEventListener("keydown", handleEscDown);
 
-  const popupForm = typePopup.querySelector(".popup__form");
-  if (popupForm) {
-    popupForm.reset();
-  }
-}
+//   const popupForm = typePopup.querySelector(".popup__form");
+//   if (popupForm) {
+//     popupForm.reset();
+//   }
+// }
 
 // функция редактирования профиля
-function handlePopupProfile(evt) {
-  evt.preventDefault();
-  profileNameElement.textContent = profileNameInput.value;
-  profileJobElement.textContent = profileJobInput.value;
-  closePopup(popupProfile);
-}
+// function handlePopupProfile(evt) {
+//   evt.preventDefault();
+//   profileNameElement.textContent = profileNameInput.value;
+//   profileJobElement.textContent = profileJobInput.value;
+//   closePopup(popupProfile);
+// }
 
 // функция открытия попапа с большим изображением
 // function showPopupImage(name, link) {
@@ -119,40 +139,40 @@ function handlePopupAddCard(evt) {
   };
 
   cardContainer.prepend(
-    new Card(newObject, "#card", handleCardClick).generateCard()
+    new Card({ data:newObject, handleCardClick }, '#card').generateCard()
   );
   closePopup(popupAddCard);
 }
 
 //функция обработки клика за пределами области popup__container
-function handlePopupClick(evt) {
-  if (evt.target.classList.contains("popup")) {
-    closePopup(evt.target);
-  }
-}
+// function handlePopupClick(evt) {
+//   if (evt.target.classList.contains("popup")) {
+//     closePopup(evt.target);
+//   }
+// }
 
 //функция обработки нажатия клавиши Esc
-function handleEscDown(evt) {
-  if (evt.key === "Escape") {
-    closePopup(document.querySelector(".popup_opened"));
-  }
-}
+// function handleEscDown(evt) {
+//   if (evt.key === "Escape") {
+//     closePopup(document.querySelector(".popup_opened"));
+//   }
+// }
 
 // --- СЛУШАТЕЛИ СОБЫТИЙ ---
 
 //обработчик к сабмиту формы "Редактирования профиля"
-formElementProfile.addEventListener("submit", handlePopupProfile);
+// formElementProfile.addEventListener("submit", handlePopupProfile);
 
 //обработчик к сабмиту формы "Добавление карточки"
-formElementAddCard.addEventListener("submit", handlePopupAddCard);
+// formElementAddCard.addEventListener("submit", handlePopupAddCard);
 
 //обработчик клика открытия попапа "Редактирования профиля"
-editButton.addEventListener("click", () => {
-  profileNameInput.value = profileNameElement.textContent;
-  profileJobInput.value = profileJobElement.textContent;
-  showPopup(popupProfile);
-  validFormPopupProfile.resetValidationState();
-});
+// editButton.addEventListener("click", () => {
+//   profileNameInput.value = profileNameElement.textContent;
+//   profileJobInput.value = profileJobElement.textContent;
+//   showPopup(popupProfile);
+//   validFormPopupProfile.resetValidationState();
+// });
 
 //oбработчик клика открытия попапа "Добавление карточки"
 addPhotoButton.addEventListener("click", () => {
@@ -161,16 +181,16 @@ addPhotoButton.addEventListener("click", () => {
 });
 
 //обработчик закрытия попапов по нажатию на "крестик"
-Array.from(document.querySelectorAll(".popup__close")).forEach((closeBtn) => {
-  closeBtn.addEventListener("click", () =>
-    closePopup(closeBtn.closest(".popup"))
-  );
-});
+// Array.from(document.querySelectorAll(".popup__close")).forEach((closeBtn) => {
+//   closeBtn.addEventListener("click", () =>
+//     closePopup(closeBtn.closest(".popup"))
+//   );
+// });
 
 //обработчик закрытия попапов по клику вне области формы
-Array.from(document.querySelectorAll(".popup")).forEach((popup) => {
-  popup.addEventListener("mousedown", handlePopupClick);
-});
+// Array.from(document.querySelectorAll(".popup")).forEach((popup) => {
+//   popup.addEventListener("mousedown", handlePopupClick);
+// });
 
 
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---

@@ -1,12 +1,21 @@
 // --- КЛАСС СОЗДАНИЯ КАРТОЧЕК ---
 
 export class Card {
-  constructor(data, cardSelector, showFunction) {
-    this._cardSelector = cardSelector;
+  // constructor(data, cardSelector, showFunction) {
+  //   this._cardSelector = cardSelector;
+  //   this._name = data.name;
+  //   this._link = data.link;
+  //   this._showPopup = showFunction;
+  // }
+
+  constructor( { data, handleCardClick }, templateSelector) {
+    this._cardSelector = templateSelector;
     this._name = data.name;
     this._link = data.link;
-    this._showPopup = showFunction;
+    this._showPopup = handleCardClick;
   }
+
+
 
   _getTemplate() {
     const cardElement = document
