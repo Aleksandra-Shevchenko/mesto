@@ -1,4 +1,6 @@
-export class UserInfo {
+// --- КЛАСС ОТОБРАЖЕНИЯ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЕ НА СТРАНИЦЕ ---
+
+export default class UserInfo {
   constructor({ selectorName, selectorJob }) {
     this._elementName =  document.querySelector(selectorName);
     this._elementJob = document.querySelector(selectorJob);
@@ -14,8 +16,8 @@ export class UserInfo {
 
 
   //который принимает новые данные пользователя и добавляет их на страницу.
-  setUserInfo({ name, job }) {
-    this._elementName.textContent = name;
-    this._elementJob.textContent = job;
+  setUserInfo({ popupName, popupJob }) {
+    this._elementName.textContent = popupName;
+    this._elementJob.textContent = popupJob;
   }
 }

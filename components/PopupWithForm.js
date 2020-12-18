@@ -1,6 +1,8 @@
-import { Popup } from "./Popup.js";
+// --- КЛАСС РАБОТЫ С ФОРМАМИ В ПОПАПАХ ---
 
-export class PopupWithForm extends Popup {
+import Popup from './Popup.js';
+
+export default class PopupWithForm extends Popup {
   constructor(popupSelector, handleSubmit) {
     super(popupSelector);
     this._handleSubmit = handleSubmit;
@@ -19,18 +21,15 @@ export class PopupWithForm extends Popup {
     }
   }
 
-  // так как при закрытии попапа форма должна ещё и сбрасываться
   close() {
     super.close();
     this._popupForm.reset();
   }
 
-  //приватный метод, который собирает данные всех полей формы
+  // метод, который собирает данные всех полей формы
   _getInputValues() {
-    // создаём пустой объект
     this._formValues = {};
 
-    // добавляем в этот объект значения всех полей
     this._inputList.forEach((input) => {
       this._formValues[input.name] = input.value;
     });
@@ -38,15 +37,12 @@ export class PopupWithForm extends Popup {
     return this._formValues;
   }
 
-  // должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы
+  // дополнительно добавляем обработчик сабмита формы
   setEventListeners() {
     super.setEventListeners();
     this._popupForm.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      console.log(this._getInputValues());
       this._handleSubmit(this._getInputValues());
     });
   }
 }
-
-// Для каждого попапа создавайте свой экземпляр класса `PopupWithForm`.

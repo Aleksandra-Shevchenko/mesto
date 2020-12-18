@@ -1,14 +1,14 @@
 // --- КЛАСС ВАЛИДАЦИИ ФОРМ ---
 
-export class FormValidator {
-  constructor(config, form) {
+export default class FormValidator {
+  constructor(config, popupSelector) {
     this._formSelector = config.formSelector;
     this._inputSelector = config.inputSelector;
     this._submitBtnSelector = config.submitButtonSelector;
     this._inactiveButtonClass = config.inactiveButtonClass;
     this._inputErrorClass = config.inputErrorClass;
     this._errorClass = config.errorClass;
-    this._formElement = form;
+    this._formElement = document.querySelector(popupSelector);
   }
 
   //метод появления сообщения об ошибке

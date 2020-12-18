@@ -1,6 +1,6 @@
 // --- КЛАСС СОЗДАНИЯ КАРТОЧЕК ---
 
-export class Card {
+export default class Card {
   constructor( { data, handleCardClick }, templateSelector) {
     this._cardSelector = templateSelector;
     this._name = data.name;

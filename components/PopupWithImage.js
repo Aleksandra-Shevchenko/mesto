@@ -1,6 +1,8 @@
-import { Popup } from "./Popup.js";
+// --- КЛАСС СОЗДАНИЯ ПОПАПА С ИЗОБРАЖЕНИЕМ ---
 
-export class PopupWithImage extends Popup {
+import Popup from "./Popup.js";
+
+export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
     this._popupTitle = this._popupElement.querySelector('.popup__photo-title');

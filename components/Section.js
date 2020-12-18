@@ -1,6 +1,6 @@
 // --- КЛАСС ОТВЕЧАЮЩИЙ ЗА ОТРИСОВКУ ЭЛЕМЕНТОВ НА СТРАНИЦЕ ---
 
-export class Section {
+export default class Section {
   constructor({ items, renderer }, containerSelector) {
     this._itemsArray = items; // массив данных, который нужно добавить на страницу при инициализации класса
     this._renderer = renderer; // функция, которая отвечает за создание и отрисовку данных на странице
