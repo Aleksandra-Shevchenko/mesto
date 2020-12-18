@@ -13,12 +13,7 @@ export default class Section {
   }
 
   //метод, который принимает DOM-элемент и добавляет его в начало контейнера
-  addItemAppend(element) {
-    this._container.append(element);
-  }
-
-  //метод, который принимает DOM-элемент и добавляет его в конец контейнера
-  addItemPrepend(element) {
+  addItem(element) {
     this._container.prepend(element);
   }
 }

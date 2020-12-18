@@ -25,7 +25,7 @@ function handlePopupProfile(inputsData) {
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
   const userCard = new Card({ data: inputsData, handleCardClick }, '#card').generateCard();
-  cardList.addItemPrepend(userCard);
+  cardList.addItem(userCard);
   popupFormAddCard.close();
 }
 
@@ -55,7 +55,7 @@ const cardList = new Section(
       const card = new Card({ data: cardItem, handleCardClick }, '#card');
       const newCard = card.generateCard();
 
-      cardList.addItemAppend(newCard);
+      cardList.addItem(newCard);
     },
   },
   ".elements"
