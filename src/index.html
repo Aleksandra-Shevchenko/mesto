@@ -6,20 +6,19 @@
   <title>Mesto</title>
   <meta name="description" content="Здесь можно делиться фотографиями интересных мест, удалять их и ставить лайки">
   <meta name="author" content="Александра Шевченко">
-  <link rel="stylesheet" href="./pages/index.css">
 </head>
 
 <body>
   <div class="page">
 
     <header class="header page__center">
-      <img class="logo" src="./images/logo-white.svg" alt="Логотип Место">
+      <img class="logo" src="<%=require('./images/logo-white.svg')%>" alt="Логотип Место">
     </header>
 
     <main class="container">
       <section class="profile page__center">
         <div class="profile__content">
-          <img src="./images/kusto.jpg" alt="Аватар пользователя" class="profile__avatar">
+          <img src="<%=require('./images/kusto.jpg')%>" alt="Аватар пользователя" class="profile__avatar">
           <div class="profile__info">
             <div class="profile__row">
               <h1 class="profile__title">Жак-Ив Кусто</h1>
@@ -92,6 +91,5 @@
     </template>
   </div>
 
-  <script type="module" src="./pages/index.js"></script>
 </body>
 </html>

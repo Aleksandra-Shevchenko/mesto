@@ -39,8 +39,14 @@ const initialCards = [
 ];
 
 
+const container = document.querySelector(".container");
+const editButton = container.querySelector(".profile__edit-btn");
+const addPhotoButton = container.querySelector(".profile__add-btn");
+
 
 export {
   validationObject,
   initialCards,
+  editButton,
+  addPhotoButton
 };

@@ -1,4 +1,6 @@
-import { validationObject, initialCards } from "../utils/constants.js";
+import './index.css';
+
+import { validationObject, initialCards, editButton, addPhotoButton } from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import Card from "../components/Card.js";
@@ -6,12 +8,6 @@ import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
-
-
-const container = document.querySelector(".container");
-const editButton = container.querySelector(".profile__edit-btn");
-const addPhotoButton = container.querySelector(".profile__add-btn");
-
 
 
 // --- ФУНКЦИИ ---
