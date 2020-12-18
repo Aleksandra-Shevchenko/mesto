@@ -1,33 +1,23 @@
 import { Popup } from "./Popup.js";
 
-
 export class PopupWithForm extends Popup {
   constructor(popupSelector, handleSubmit) {
     super(popupSelector);
     this._handleSubmit = handleSubmit;
     this._popupForm = this._popupElement.querySelector(".popup__form");
+    this._inputList = this._popupElement.querySelectorAll(".popup__input");
   }
 
-  open(data) {
+  open(inputsData = {}) {
     super.open();
-    this._data = data;
+    this._inputsData = inputsData;
 
-    Object.keys(this._data).forEach((key) => {
-
-      // console.log(this._popupElement.querySelector(".popup__input").name)
-      // this._popupElement.querySelector(".popup__input").key = this._data.key;
-    });
-
-
-
-
-
-
+    if (Object.keys(this._inputsData).length) {
+      this._inputList.forEach((input) => {
+        input.value = this._inputsData[input.name];
+      });
+    }
   }
-
-
-
-
 
   // так как при закрытии попапа форма должна ещё и сбрасываться
   close() {
@@ -37,8 +27,6 @@ export class PopupWithForm extends Popup {
 
   //приватный метод, который собирает данные всех полей формы
   _getInputValues() {
-    this._inputList = this._popupElement.querySelectorAll(".popup__input");
-
     // создаём пустой объект
     this._formValues = {};
 

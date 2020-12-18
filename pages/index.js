@@ -3,7 +3,6 @@ import { validationObject, initialCards } from "../utils/constants.js";
 import { FormValidator } from "../components/FormValidator.js";
 import { Card } from "../components/Card.js";
 import { Section } from "../components/Section.js";
-import { Popup } from "../components/Popup.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
@@ -41,61 +40,64 @@ const popupImageTitle = popupImage.querySelector(".popup__photo-title");
 
 
 
+const userInfo = new UserInfo({
+  selectorName: ".profile__title",
+  selectorJob: ".profile__subtitle",
+});
 
-
-const cardList = new Section(
-  {
-    items: initialCards,
-    renderer: (cardItem) => {
-      const card = new Card({ data: cardItem, handleCardClick }, "#card");
-      const newCard = card.generateCard();
-
-      cardList.addItem(newCard);
-    },
-  },
-  '.elements'
+const popupFormProfile = new PopupWithForm(
+  ".popup_type_edit",
+  handlePopupProfile
 );
-
-cardList.renderItems();
-
-
-const userInfo = new UserInfo({ selectorName: '.profile__title', selectorJob: '.profile__subtitle' })
-
-
-
-
-const popupFormProfile = new PopupWithForm('.popup_type_edit', handlePopupProfile);
 popupFormProfile.setEventListeners();
 
-
 editButton.addEventListener("click", () => {
-
   popupFormProfile.open(userInfo.getUserInfo());
-  console.log(userInfo.getUserInfo());
-
   validFormPopupProfile.resetValidationState();
 });
 
-
 function handlePopupProfile(data) {
-  userInfo.setUserInfo({ name: data.popupName, job: data.popupJob })
+  userInfo.setUserInfo({
+    name: data.popupName,
+    job: data.popupJob,
+  });
   popupFormProfile.close();
 }
 
+const popupFormAddCard = new PopupWithForm(
+  ".popup_type_add-card",
+  handlePopupAddCard
+);
+popupFormAddCard.setEventListeners();
 
+addPhotoButton.addEventListener("click", () => {
+  popupFormAddCard.open();
+  validFormPopupAddCard.resetValidationState();
+});
 
-
-const popupWithImage = new PopupWithImage('.popup_type_image');
-popupWithImage.setEventListeners();
-
-function handleCardClick(title, link) {
-  popupWithImage.open(title, link);
+function handlePopupAddCard(inputsData) {
+  const userCard = new Card(
+    {
+      data: inputsData,
+      handleCardClick,
+    },
+    "#card"
+  ).generateCard();
+  cardList.addItemPrepend(userCard);
+  popupFormAddCard.close();
 }
 
+const popupWithImage = new PopupWithImage(".popup_type_image");
+popupWithImage.setEventListeners();
 
 
 
 // --- ФУНКЦИИ ---
+
+//функция открытия попапа с картинкой (при клике на карточку)
+function handleCardClick(title, link) {
+  popupWithImage.open(title, link);
+}
 
 // функция открытия попапа
 // function showPopup(typePopup) {
@@ -131,18 +133,18 @@ function handleCardClick(title, link) {
 // }
 
 // функция добавления новых карточек от пользователя
-function handlePopupAddCard(evt) {
-  evt.preventDefault();
-  const newObject = {
-    name: formInputCardName.value,
-    link: formInputCardLink.value,
-  };
+// function handlePopupAddCard(evt) {
+//   evt.preventDefault();
+//   const newObject = {
+//     name: formInputCardName.value,
+//     link: formInputCardLink.value,
+//   };
 
-  cardContainer.prepend(
-    new Card({ data:newObject, handleCardClick }, '#card').generateCard()
-  );
-  closePopup(popupAddCard);
-}
+//   cardContainer.prepend(
+//     new Card({ data:newObject, handleCardClick }, '#card').generateCard()
+//   );
+//   closePopup(popupAddCard);
+// }
 
 //функция обработки клика за пределами области popup__container
 // function handlePopupClick(evt) {
@@ -175,10 +177,10 @@ function handlePopupAddCard(evt) {
 // });
 
 //oбработчик клика открытия попапа "Добавление карточки"
-addPhotoButton.addEventListener("click", () => {
-  showPopup(popupAddCard);
-  validFormPopupAddCard.resetValidationState();
-});
+// addPhotoButton.addEventListener("click", () => {
+//   showPopup(popupAddCard);
+//   validFormPopupAddCard.resetValidationState();
+// });
 
 //обработчик закрытия попапов по нажатию на "крестик"
 // Array.from(document.querySelectorAll(".popup__close")).forEach((closeBtn) => {
@@ -192,7 +194,6 @@ addPhotoButton.addEventListener("click", () => {
 //   popup.addEventListener("mousedown", handlePopupClick);
 // });
 
-
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 
 //вставляем экземпляры карточек в контейнер при загрузке страницы
@@ -202,6 +203,29 @@ addPhotoButton.addEventListener("click", () => {
 
 //   cardContainer.append(newCard);
 // });
+
+//создаем экземпляр класса Section и отрисовываем все элементы на странице
+const cardList = new Section(
+  {
+    items: initialCards,
+    renderer: (cardItem) => {
+      const card = new Card({ data: cardItem, handleCardClick }, "#card");
+      const newCard = card.generateCard();
+
+      cardList.addItemAppend(newCard);
+    },
+  },
+  ".elements"
+);
+cardList.renderItems();
+
+
+
+
+
+
+
+
 
 //создаем экземпляры класса FormValidator и включаем валидацию форм
 const validFormPopupAddCard = new FormValidator(validationObject, popupAddCard);

@@ -8,7 +8,7 @@ export class UserInfo {
   getUserInfo() {
     return this._profileData = {
       popupName: this._elementName.textContent,
-      popoupJob: this._elementJob.textContent,
+      popupJob: this._elementJob.textContent,
     };
   }
 
