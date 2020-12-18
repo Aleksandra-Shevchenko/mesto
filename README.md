@@ -37,6 +37,11 @@
 ### Рефакторинг по итогам седьмого спринта:
 * созданы классы Card и FormValidator.
 
+### Рефакторинг по итогам восьмого спринта:
+* созданы классы Section, Popup, PopupWithForm, PopupWithImage и UserInfo,
+* создана новая структура файлов в проекте,
+* настроен Вебпак и проект собран им.
+
 **Figma:** [Ссылка на макет в Figma](https://www.figma.com/file/StZjf8HnoeLdiXS7dYrLAh/JavaScript.-Sprint-4)
 
 **Итоговый вид страницы:** [Ссылка на страницу проекта](https://aleksandra-shevchenko.github.io/mesto/index.html)
