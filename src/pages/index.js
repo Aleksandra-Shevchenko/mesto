@@ -1,6 +1,6 @@
 import './index.css';
 
-import { validationObject, initialCards, editButton, addPhotoButton } from "../utils/constants.js";
+import { validationObject, initialCards, selectorObj, editButton, addPhotoButton, popupProfileInputs } from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import Card from "../components/Card.js";
@@ -22,10 +22,17 @@ function handlePopupProfile(inputsData) {
   popupFormProfile.close();
 }
 
+// функция создания карточек
+function createCard(dataCard) {
+  const card = new Card({ data: dataCard, handleCardClick }, selectorObj.cardId);
+  const newCard = card.generateCard();
+
+  return newCard;
+}
+
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
-  const userCard = new Card({ data: inputsData, handleCardClick }, '#card').generateCard();
-  cardList.addItem(userCard);
+  cardList.addItem( createCard(inputsData) );
   popupFormAddCard.close();
 }
 
@@ -33,13 +40,19 @@ function handlePopupAddCard(inputsData) {
 
 // --- СЛУШАТЕЛИ СОБЫТИЙ ---
 //обработчик клика открытия попапа по кнопке 'Редактирования профиля'
-editButton.addEventListener("click", () => {
-  popupFormProfile.open(userInfo.getUserInfo());
+editButton.addEventListener('click', () => {
+  popupFormProfile.open();
+
+  const userData = userInfo.getUserInfo();
+  popupProfileInputs.forEach(input => {
+    input.value = userData[input.name];
+  });
+
   validFormPopupProfile.resetValidationState();
 });
 
 //oбработчик клика открытия попапа по кнопке 'Добавление карточки'
-addPhotoButton.addEventListener("click", () => {
+addPhotoButton.addEventListener('click', () => {
   popupFormAddCard.open();
   validFormPopupAddCard.resetValidationState();
 });
@@ -52,35 +65,32 @@ const cardList = new Section(
   {
     items: initialCards,
     renderer: (cardItem) => {
-      const card = new Card({ data: cardItem, handleCardClick }, '#card');
-      const newCard = card.generateCard();
-
-      cardList.addItem(newCard);
+      cardList.addItem( createCard(cardItem) );
     },
   },
-  ".elements"
+  selectorObj.elementsSelector
 );
 cardList.renderItems();
 
 //создаем экземпляр класса PopupWhithImage и навешиваем слушатели событий
-const popupWithImage = new PopupWithImage('.popup_type_image');
+const popupWithImage = new PopupWithImage(selectorObj.popupImageSelector);
 popupWithImage.setEventListeners();
 
 //создаем экземпляр класса PopupWhithForm для попапа 'Редактирование профиля'
 //и навешиваем слушатели событий
-const popupFormProfile = new PopupWithForm('.popup_type_edit', handlePopupProfile);
+const popupFormProfile = new PopupWithForm(selectorObj.popupProfileSelector, handlePopupProfile);
 popupFormProfile.setEventListeners();
 
 //создаем экземпляр класса PopupWhithForm для попапа 'Добавление карточки'
 //и навешиваем слушатели событий
-const popupFormAddCard = new PopupWithForm('.popup_type_add-card', handlePopupAddCard);
+const popupFormAddCard = new PopupWithForm(selectorObj.popupAddCardSelector, handlePopupAddCard);
 popupFormAddCard.setEventListeners();
 
 //создаем экземпляры класса FormValidator и включаем валидацию форм
-const validFormPopupAddCard = new FormValidator(validationObject, '.popup_type_add-card');
+const validFormPopupAddCard = new FormValidator(validationObject, selectorObj.popupAddCardSelector);
 validFormPopupAddCard.enableValidation();
 
-const validFormPopupProfile = new FormValidator(validationObject, '.popup_type_edit');
+const validFormPopupProfile = new FormValidator(validationObject, selectorObj.popupProfileSelector);
 validFormPopupProfile.enableValidation();
 
 //создаем экземпляр класса UserInfo

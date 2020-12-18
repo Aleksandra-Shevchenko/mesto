@@ -14,7 +14,6 @@ export default class UserInfo {
     };
   }
 
-
   //который принимает новые данные пользователя и добавляет их на страницу.
   setUserInfo({ popupName, popupJob }) {
     this._elementName.textContent = popupName;

@@ -38,15 +38,29 @@ const initialCards = [
   }
 ];
 
+//селекторы для создания экземпляров классов
+const selectorObj = {
+  popupImageSelector: '.popup_type_image',
+  popupProfileSelector: '.popup_type_edit',
+  popupAddCardSelector: '.popup_type_add-card',
+  elementsSelector: '.elements',
+  // popupInputSelector: '.popup__input',
+  cardId: '#card',
+};
+
 
 const container = document.querySelector(".container");
 const editButton = container.querySelector(".profile__edit-btn");
 const addPhotoButton = container.querySelector(".profile__add-btn");
+const popupProfile = document.querySelector('.popup_type_edit');
+const popupProfileInputs = popupProfile.querySelectorAll('.popup__input');
 
 
 export {
   validationObject,
   initialCards,
   editButton,
-  addPhotoButton
+  addPhotoButton,
+  selectorObj,
+  popupProfileInputs
 };

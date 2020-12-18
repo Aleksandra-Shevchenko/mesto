@@ -20,18 +20,19 @@ export default class Card {
 
   generateCard() {
     this._element = this._getTemplate();
-    this._setEventListeners();
 
-    const elementPic = this._element.querySelector('.element__pic');
-    elementPic.src = this._link;
-    elementPic.alt =`Фото ${this._name}`;
+    this._picture = this._element.querySelector('.element__pic');
+    this._picture.src = this._link;
+    this._picture.alt =`Фото ${this._name}`;
     this._element.querySelector('.element__title').textContent = this._name;
+
+    this._setEventListeners();
 
     return this._element;
   }
 
   _setEventListeners() {
-    this._element.querySelector('.element__pic').addEventListener('click', () => {
+    this._picture.addEventListener('click', () => {
       this._showPopup(this._name, this._link);
     });
 
