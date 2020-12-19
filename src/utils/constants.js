@@ -44,7 +44,8 @@ const selectorObj = {
   popupProfileSelector: '.popup_type_edit',
   popupAddCardSelector: '.popup_type_add-card',
   elementsSelector: '.elements',
-  // popupInputSelector: '.popup__input',
+  profileNameSelector: '.profile__title',
+  profileJobSelector: '.profile__subtitle',
   cardId: '#card',
 };
 

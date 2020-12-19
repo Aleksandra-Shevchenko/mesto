@@ -95,7 +95,7 @@ validFormPopupProfile.enableValidation();
 
 //создаем экземпляр класса UserInfo
 const userInfo = new UserInfo({
-  selectorName: '.profile__title',
-  selectorJob: '.profile__subtitle',
+  selectorName: selectorObj.profileNameSelector,
+  selectorJob: selectorObj.profileJobSelector
 });
 
