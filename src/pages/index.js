@@ -22,6 +22,14 @@ function handlePopupProfile(inputsData) {
   popupFormProfile.close();
 }
 
+// функция заполнения полей формы данными из профиля
+function handleTextInput() {
+  const userData = userInfo.getUserInfo();
+  popupProfileInputs.forEach(input => {
+    input.value = userData[input.name];
+  });
+}
+
 // функция создания карточек
 function createCard(dataCard) {
   const card = new Card({ data: dataCard, handleCardClick }, selectorObj.cardId);
@@ -42,12 +50,7 @@ function handlePopupAddCard(inputsData) {
 //обработчик клика открытия попапа по кнопке 'Редактирования профиля'
 editButton.addEventListener('click', () => {
   popupFormProfile.open();
-
-  const userData = userInfo.getUserInfo();
-  popupProfileInputs.forEach(input => {
-    input.value = userData[input.name];
-  });
-
+  handleTextInput();
   validFormPopupProfile.resetValidationState();
 });
 
