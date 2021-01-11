@@ -1,14 +1,15 @@
 // --- КЛАСС СОЗДАНИЯ КАРТОЧЕК ---
 
 export default class Card {
-  constructor( { data, handleCardClick, handleTrashClick }, templateSelector) {
+  constructor( { data, handleCardClick, handleTrashClick }, templateSelector, userId) {
     this._cardSelector = templateSelector;
     this._name = data.name;
     this._link = data.link;
     this._showPopup = handleCardClick;
-    this._showPopupConfirm = handleTrashClick;
-    this._owner = data.owner;
-    this._id = data._id;
+    this._handleTrashClick = handleTrashClick;
+    this._idOwner = data.owner._id;
+    this._userId = userId;
+    this._cardId = data._id
   }
 
   _getTemplate() {
@@ -28,11 +29,22 @@ export default class Card {
     this._picture.src = this._link;
     this._picture.alt =`Фото ${this._name}`;
     this._element.querySelector('.element__title').textContent = this._name;
+    this._delete = this._element.querySelector('.element__trash');
 
     this._setEventListeners();
 
+    if(this._userId !== this._idOwner) {
+      this._delete.remove();
+    }
+
     return this._element;
   }
+
+  removeCard() {
+    this._element.remove();
+    this._element = null;
+  }
+
 
 
 
@@ -45,23 +57,14 @@ export default class Card {
       this._handleLikeCard();
     });
 
-    // this._element.querySelector('.element__trash').addEventListener('click', () => {
-    //   this._handleDeleteCard();
-    // });
 
-    this._element.querySelector('.element__trash').addEventListener('click', () => {
-      this._showPopupConfirm(this._id, this._element);
+    this._delete.addEventListener('click', () => {
+      this._handleTrashClick(this._cardId, this);
     });
   }
 
   _handleLikeCard() {
     this._element.querySelector('.element__like').classList.toggle('element__like_active');
-  }
-
-
-  deleteCard() {
-    this._element.remove();
-    this._element = null;
   }
 
 

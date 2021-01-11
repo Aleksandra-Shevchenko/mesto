@@ -1,6 +1,13 @@
 import './index.css';
 
-import { validationObject, initialCards, selectorObj, editButton, addPhotoButton, popupProfileInputs } from "../utils/constants.js";
+import {
+  validationObject,
+  initialCards,
+  selectorObj,
+  editButton,
+  addPhotoButton,
+  popupProfileInputs
+} from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import Card from "../components/Card.js";
@@ -19,18 +26,40 @@ function handleCardClick(title, link) {
 }
 
 //функция открытия попапа с подтверждением (при клике на корзину)
-function handleTrashClick(cardId) {
-  popupWithConfirm.open(cardId);
-  console.log(element)
+function handleTrashClick(id, card) {
+  popupWithConfirm.setSubmitAction(() => handlePopupConfirm(id, card))
+  popupWithConfirm.open();
 }
+
+// функция удаления карточек от пользователя (подтверждение)
+function handlePopupConfirm(id, card) {
+  api.deleteCard(id)
+    .then(() => {
+      card.removeCard();
+      popupWithConfirm.close();
+    })
+    .catch((err) => {
+      console.log(err);
+      popupWithConfirm.close();
+    });
+}
+
 
 
 // функция редактирования профиля (сабмит формы)
 //ОТРЕДАКТИРОВАНА
 function handlePopupProfile(inputsData) {
-  userInfo.setUserInfo(inputsData);
-  api.saveUserChanges(inputsData);
-  popupFormProfile.close();
+  api.saveUserChanges(inputsData)
+    .then((data) => {
+      userInfo.setUserInfo({
+        popupName: data.name,
+        popupJob: data.about,
+      });
+      popupFormProfile.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
 // функция заполнения полей формы данными из профиля
@@ -42,35 +71,37 @@ function handleTextInput() {
 }
 
 // функция создания карточек
-function createCard(dataCard) {
-  const card = new Card({ data: dataCard, handleCardClick, handleTrashClick }, selectorObj.cardId);
+function createCard(dataCard, id) {
+  const card = new Card({
+    data: dataCard,
+    handleCardClick,
+    handleTrashClick,
+  },
+  selectorObj.cardId,
+  id);
   const newCard = card.generateCard();
-
-  // if(dataCard.owner.name !== userInfo.getUserInfo().popupName){
-  //   newCard.querySelector(selectorObj.trashCard).remove();
-  // }
 
   return newCard;
 }
 
+
+
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
-  cardList.addItem( createCard(inputsData) );
-  api.postNewCard(inputsData);
-  popupFormAddCard.close();
+  api.postNewCard(inputsData)
+    .then((data) => {
+      console.log(data.owner._id);
+      cardList.addItemPrepend(createCard(data, data.owner._id));
+      popupFormAddCard.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 }
 
-// функция удаления карточек от пользователя (подтверждение)
-function handlePopupConfirm(cardId) {
-  api.deleteCard(cardId)
-  popupWithConfirm.close();
-}
 
-const popupWithConfirm = new PopupWithConfirm(selectorObj.popupConfirmSelector, handlePopupConfirm);
+const popupWithConfirm = new PopupWithConfirm(selectorObj.popupConfirmSelector);
 popupWithConfirm.setEventListeners();
-
-
-
 
 
 
@@ -93,11 +124,9 @@ addPhotoButton.addEventListener('click', () => {
 
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
 //создаем экземпляр класса Section
-const cardList = new Section(
-  {
-    items: initialCards,
-    renderer: (cardItem) => {
-      cardList.addItem( createCard(cardItem) );
+const cardList = new Section({
+    renderer: (cardItem, id) => {
+      cardList.addItem(createCard(cardItem, id));
     },
   },
   selectorObj.elementsSelector
@@ -142,13 +171,20 @@ const api = new Api({
   }
 });
 
-api.getUserData();
 
-api.getInitialCards()
-  .then(result => {
-    cardList.renderItems(result);
+//в Promise.all передаем массив промисов, которые нужно выполнить
+Promise.all([
+    api.getUserData(),
+    api.getInitialCards()
+  ])
+  .then((values) => {
+    userInfo.setUserInfo({
+      popupName: values[0].name,
+      popupJob: values[0].about,
+    })
+
+    cardList.renderItems(values[1], values[0]._id);
   })
   .catch((err) => {
     console.log(err);
-    cardList.renderItems();
-  });
+  })
