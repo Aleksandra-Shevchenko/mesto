@@ -8,6 +8,8 @@ import Section from "../components/Section.js";
 import PopupWithImage from "../components/popup-with-image.js";
 import PopupWithForm from "../components/popup-with-form.js";
 import UserInfo from "../components/user-info.js";
+import Api from "../components/Api.js";
+import PopupWithConfirm from "../components/PopupWithConfirm.js";
 
 
 // --- ФУНКЦИИ ---
@@ -16,9 +18,18 @@ function handleCardClick(title, link) {
   popupWithImage.open(title, link);
 }
 
+//функция открытия попапа с подтверждением (при клике на корзину)
+function handleTrashClick(cardId) {
+  popupWithConfirm.open(cardId);
+  console.log(element)
+}
+
+
 // функция редактирования профиля (сабмит формы)
+//ОТРЕДАКТИРОВАНА
 function handlePopupProfile(inputsData) {
   userInfo.setUserInfo(inputsData);
+  api.saveUserChanges(inputsData);
   popupFormProfile.close();
 }
 
@@ -32,8 +43,12 @@ function handleTextInput() {
 
 // функция создания карточек
 function createCard(dataCard) {
-  const card = new Card({ data: dataCard, handleCardClick }, selectorObj.cardId);
+  const card = new Card({ data: dataCard, handleCardClick, handleTrashClick }, selectorObj.cardId);
   const newCard = card.generateCard();
+
+  // if(dataCard.owner.name !== userInfo.getUserInfo().popupName){
+  //   newCard.querySelector(selectorObj.trashCard).remove();
+  // }
 
   return newCard;
 }
@@ -41,8 +56,22 @@ function createCard(dataCard) {
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
   cardList.addItem( createCard(inputsData) );
+  api.postNewCard(inputsData);
   popupFormAddCard.close();
 }
+
+// функция удаления карточек от пользователя (подтверждение)
+function handlePopupConfirm(cardId) {
+  api.deleteCard(cardId)
+  popupWithConfirm.close();
+}
+
+const popupWithConfirm = new PopupWithConfirm(selectorObj.popupConfirmSelector, handlePopupConfirm);
+popupWithConfirm.setEventListeners();
+
+
+
+
 
 
 
@@ -63,7 +92,7 @@ addPhotoButton.addEventListener('click', () => {
 
 
 // --- ДЕЙСТВИЯ ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
-//создаем экземпляр класса Section и отрисовываем все элементы на странице
+//создаем экземпляр класса Section
 const cardList = new Section(
   {
     items: initialCards,
@@ -73,7 +102,7 @@ const cardList = new Section(
   },
   selectorObj.elementsSelector
 );
-cardList.renderItems();
+
 
 //создаем экземпляр класса PopupWhithImage и навешиваем слушатели событий
 const popupWithImage = new PopupWithImage(selectorObj.popupImageSelector);
@@ -102,3 +131,24 @@ const userInfo = new UserInfo({
   selectorJob: selectorObj.profileJobSelector
 });
 
+
+//ПРОЕКТНАЯ 9
+
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-19',
+  headers: {
+    authorization: '249de57f-61eb-4f88-a95a-b462a0c3429a',
+    'Content-Type': 'application/json'
+  }
+});
+
+api.getUserData();
+
+api.getInitialCards()
+  .then(result => {
+    cardList.renderItems(result);
+  })
+  .catch((err) => {
+    console.log(err);
+    cardList.renderItems();
+  });

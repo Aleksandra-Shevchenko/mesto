@@ -55,10 +55,16 @@
 @import url(../blocks/popup/__input-error/_active/popup__input-error_active.css);
 @import url(../blocks/popup/__submit-btn/_inactive/popup__submit-btn_inactive.css);
 
+@import url(../blocks/popup/_type/popup_type_confirm.css);
+@import url(../blocks/popup/__container/_type/popup__container_type_confirm.css);
+@import url(../blocks/popup/__title/_type/popup__title_type_confirm.css);
 
 
 
 
 
+.popup__submit-btn_type_confirm{
+  margin: 0;
+}
 
 

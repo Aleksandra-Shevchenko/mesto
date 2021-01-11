@@ -47,6 +47,8 @@ const selectorObj = {
   profileNameSelector: '.profile__title',
   profileJobSelector: '.profile__subtitle',
   cardId: '#card',
+  trashCard: '.element__trash',
+  popupConfirmSelector: '.popup_type_confirm',
 };
 
 

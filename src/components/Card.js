@@ -1,11 +1,14 @@
 // --- КЛАСС СОЗДАНИЯ КАРТОЧЕК ---
 
 export default class Card {
-  constructor( { data, handleCardClick }, templateSelector) {
+  constructor( { data, handleCardClick, handleTrashClick }, templateSelector) {
     this._cardSelector = templateSelector;
     this._name = data.name;
     this._link = data.link;
     this._showPopup = handleCardClick;
+    this._showPopupConfirm = handleTrashClick;
+    this._owner = data.owner;
+    this._id = data._id;
   }
 
   _getTemplate() {
@@ -31,6 +34,8 @@ export default class Card {
     return this._element;
   }
 
+
+
   _setEventListeners() {
     this._picture.addEventListener('click', () => {
       this._showPopup(this._name, this._link);
@@ -40,8 +45,12 @@ export default class Card {
       this._handleLikeCard();
     });
 
+    // this._element.querySelector('.element__trash').addEventListener('click', () => {
+    //   this._handleDeleteCard();
+    // });
+
     this._element.querySelector('.element__trash').addEventListener('click', () => {
-      this._handleDeleteCard();
+      this._showPopupConfirm(this._id, this._element);
     });
   }
 
@@ -49,8 +58,11 @@ export default class Card {
     this._element.querySelector('.element__like').classList.toggle('element__like_active');
   }
 
-  _handleDeleteCard() {
+
+  deleteCard() {
     this._element.remove();
     this._element = null;
   }
+
+
 }
