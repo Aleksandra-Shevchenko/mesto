@@ -8,6 +8,8 @@ export default class PopupWithForm extends Popup {
     this._handleSubmit = handleSubmit;
     this._popupForm = this._popupElement.querySelector(".popup__form");
     this._inputList = this._popupElement.querySelectorAll(".popup__input");
+    this._button = this._popupForm.querySelector('.popup__submit-btn');
+    this._textButton = this._button.textContent;
   }
 
   close() {
@@ -24,6 +26,14 @@ export default class PopupWithForm extends Popup {
     });
 
     return this._formValues;
+  }
+
+  renderSaving(status){
+    if(status){
+      this._button.textContent = `Cохранение...`;
+    } else {
+      this._button.textContent = this._textButton;
+    }
   }
 
   // дополнительно добавляем обработчик сабмита формы

@@ -71,6 +71,7 @@ function handleLikeClick(id, isLiked, card) {
 
 // функция редактирования профиля (сабмит формы)
 function handlePopupProfile(inputsData) {
+  popupFormProfile.renderSaving(true);
   api.saveUserChanges(inputsData)
     .then((data) => {
       userInfo.setUserInfo({
@@ -82,6 +83,9 @@ function handlePopupProfile(inputsData) {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      popupFormProfile.renderSaving(false);
     })
 }
 
@@ -112,6 +116,7 @@ function createCard(dataCard, id) {
 
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
+  popupFormAddCard.renderSaving(true);
   api.postNewCard(inputsData)
     .then((data) => {
       cardList.addItemPrepend(createCard(data, data.owner._id));
@@ -120,10 +125,14 @@ function handlePopupAddCard(inputsData) {
     .catch((err) => {
       console.log(err);
     })
+    .finally(() => {
+      popupFormAddCard.renderSaving(false);
+    })
 }
 
 // функция редактирования аватара пользователя (сабмит формы)
 function handlePopupChangeAvatar(inputsData) {
+  popupFormChangeAvatar.renderSaving(true);
   api.changedAvatar(inputsData)
     .then((data) => {
       console.log(data);
@@ -132,6 +141,9 @@ function handlePopupChangeAvatar(inputsData) {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      popupFormChangeAvatar.renderSaving(false);
     })
 }
 
