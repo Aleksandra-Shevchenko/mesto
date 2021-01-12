@@ -2,11 +2,12 @@ import './index.css';
 
 import {
   validationObject,
-  initialCards,
+  // initialCards,
   selectorObj,
   editButton,
   addPhotoButton,
-  popupProfileInputs
+  popupProfileInputs,
+  changeAvatarButton
 } from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
@@ -44,16 +45,38 @@ function handlePopupConfirm(id, card) {
     });
 }
 
+// функция отвечающая за постановку лайка
+function handleLikeClick(id, isLiked, card) {
+  if (isLiked) {
+    //отправляем запрос снятия лайка
+    api.dislikedCard(id)
+      .then((data) => {
+        card.setLikes(data.likes)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    //отправляем запрос на установку лайка
+    api.likedCard(id)
+      .then((data) => {
+        card.setLikes(data.likes);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}
 
 
 // функция редактирования профиля (сабмит формы)
-//ОТРЕДАКТИРОВАНА
 function handlePopupProfile(inputsData) {
   api.saveUserChanges(inputsData)
     .then((data) => {
       userInfo.setUserInfo({
         popupName: data.name,
         popupJob: data.about,
+        avatar: data.avatar
       });
       popupFormProfile.close();
     })
@@ -73,24 +96,24 @@ function handleTextInput() {
 // функция создания карточек
 function createCard(dataCard, id) {
   const card = new Card({
-    data: dataCard,
-    handleCardClick,
-    handleTrashClick,
-  },
-  selectorObj.cardId,
-  id);
+      data: dataCard,
+      handleCardClick,
+      handleTrashClick,
+      handleLikeClick,
+    },
+    selectorObj.cardId,
+    id);
   const newCard = card.generateCard();
+  card.setLikes(dataCard.likes);
 
   return newCard;
 }
-
 
 
 // функция добавления новых карточек от пользователя (сабмит формы)
 function handlePopupAddCard(inputsData) {
   api.postNewCard(inputsData)
     .then((data) => {
-      console.log(data.owner._id);
       cardList.addItemPrepend(createCard(data, data.owner._id));
       popupFormAddCard.close();
     })
@@ -99,9 +122,20 @@ function handlePopupAddCard(inputsData) {
     })
 }
 
+// функция редактирования аватара пользователя (сабмит формы)
+function handlePopupChangeAvatar(inputsData) {
+  api.changedAvatar(inputsData)
+    .then((data) => {
+      console.log(data);
+      userInfo._avatar.src = data.avatar;
+      popupFormChangeAvatar.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+}
 
-const popupWithConfirm = new PopupWithConfirm(selectorObj.popupConfirmSelector);
-popupWithConfirm.setEventListeners();
+
 
 
 
@@ -117,6 +151,12 @@ editButton.addEventListener('click', () => {
 //oбработчик клика открытия попапа по кнопке 'Добавление карточки'
 addPhotoButton.addEventListener('click', () => {
   popupFormAddCard.open();
+  validFormPopupAddCard.resetValidationState();
+});
+
+//oбработчик клика открытия попапа по кнопке 'Редактирование аватара'
+changeAvatarButton.addEventListener('click', () => {
+  popupFormChangeAvatar.open();
   validFormPopupAddCard.resetValidationState();
 });
 
@@ -137,6 +177,13 @@ const cardList = new Section({
 const popupWithImage = new PopupWithImage(selectorObj.popupImageSelector);
 popupWithImage.setEventListeners();
 
+//создаем экземпляр класса PopupWhithConfirm
+//и навешиваем слушатели событий
+const popupWithConfirm = new PopupWithConfirm(selectorObj.popupConfirmSelector);
+popupWithConfirm.setEventListeners();
+
+
+
 //создаем экземпляр класса PopupWhithForm для попапа 'Редактирование профиля'
 //и навешиваем слушатели событий
 const popupFormProfile = new PopupWithForm(selectorObj.popupProfileSelector, handlePopupProfile);
@@ -147,6 +194,12 @@ popupFormProfile.setEventListeners();
 const popupFormAddCard = new PopupWithForm(selectorObj.popupAddCardSelector, handlePopupAddCard);
 popupFormAddCard.setEventListeners();
 
+//создаем экземпляр класса PopupWhithForm для попапа 'Редактирование аватара'
+//и навешиваем слушатели событий
+const popupFormChangeAvatar = new PopupWithForm(selectorObj.popupChangeAvatarSelector, handlePopupChangeAvatar);
+popupFormChangeAvatar.setEventListeners();
+
+
 //создаем экземпляры класса FormValidator и включаем валидацию форм
 const validFormPopupAddCard = new FormValidator(validationObject, selectorObj.popupAddCardSelector);
 validFormPopupAddCard.enableValidation();
@@ -154,14 +207,16 @@ validFormPopupAddCard.enableValidation();
 const validFormPopupProfile = new FormValidator(validationObject, selectorObj.popupProfileSelector);
 validFormPopupProfile.enableValidation();
 
+const validFormPopupChangeAvatar = new FormValidator(validationObject, selectorObj.popupChangeAvatarSelector);
+validFormPopupChangeAvatar.enableValidation();
+
+
 //создаем экземпляр класса UserInfo
 const userInfo = new UserInfo({
   selectorName: selectorObj.profileNameSelector,
-  selectorJob: selectorObj.profileJobSelector
+  selectorJob: selectorObj.profileJobSelector,
+  selectorAvatar: selectorObj.avatarSelector,
 });
-
-
-//ПРОЕКТНАЯ 9
 
 const api = new Api({
   baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-19',
@@ -170,7 +225,6 @@ const api = new Api({
     'Content-Type': 'application/json'
   }
 });
-
 
 //в Promise.all передаем массив промисов, которые нужно выполнить
 Promise.all([
@@ -181,10 +235,11 @@ Promise.all([
     userInfo.setUserInfo({
       popupName: values[0].name,
       popupJob: values[0].about,
+      avatar: values[0].avatar,
     })
 
     cardList.renderItems(values[1], values[0]._id);
   })
   .catch((err) => {
     console.log(err);
-  })
+  });

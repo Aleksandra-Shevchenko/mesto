@@ -58,13 +58,20 @@
 @import url(../blocks/popup/_type/popup_type_confirm.css);
 @import url(../blocks/popup/__container/_type/popup__container_type_confirm.css);
 @import url(../blocks/popup/__title/_type/popup__title_type_confirm.css);
+@import url(../blocks/popup/__submit-btn/_type/popup__submit-btn_type_confirm.css);
+
+@import url(../blocks/element/__sum-like/element__sum-like.css);
+@import url(../blocks/element/__like-group/element__like-group.css);
+
+@import url(../blocks/profile/__change-btn/profile__change-btn.css);
+@import url(../blocks/profile/__pic/profile__pic.css);
+@import url(../blocks/popup/__container/_type/popup__container_type_change-avatar.css);
 
 
 
 
 
-.popup__submit-btn_type_confirm{
-  margin: 0;
-}
+
+
 
 

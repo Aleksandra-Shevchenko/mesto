@@ -6,6 +6,7 @@ export default class Api {
     this._baseUrl = baseUrl;
     this._userUrl = `${this._baseUrl}/users/me`;
     this._cardsUrl = `${this._baseUrl}/cards`;
+    this._likesUrl = `${this._baseUrl}/cards/likes`;
     this._token = headers['authorization'];
   }
 
@@ -58,10 +59,6 @@ export default class Api {
         }
         return Promise.reject(`Ошибка: ${res.status}`);
       })
-      // .then(data => {
-      //   this._arrayCards = data;
-      //   console.log(this._arrayCards);
-      // })
   }
 
   postNewCard({ name, link }) {
@@ -97,6 +94,55 @@ export default class Api {
       }
       return Promise.reject(`Ошибка: ${res.status}`);
     })
+  }
+
+  likedCard(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        authorization: this._token,
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+  }
+
+  dislikedCard(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this._token,
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+  }
+
+  changedAvatar(src) {
+    return fetch(`${this._userUrl}/avatar`, {
+        method: 'PATCH',
+        headers: {
+          authorization: this._token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          avatar: src.link
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
   }
 
 }

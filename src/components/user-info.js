@@ -1,9 +1,10 @@
 // --- КЛАСС ОТОБРАЖЕНИЯ ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЕ НА СТРАНИЦЕ ---
 
 export default class UserInfo {
-  constructor({ selectorName, selectorJob }) {
+  constructor({ selectorName, selectorJob, selectorAvatar }) {
     this._elementName =  document.querySelector(selectorName);
     this._elementJob = document.querySelector(selectorJob);
+    this._avatar = document.querySelector(selectorAvatar);
   }
 
   //метод который возвращает объект с данными пользователя. Этот метод пригодится когда данные пользователя нужно будет подставить в форму при открытии
@@ -15,8 +16,9 @@ export default class UserInfo {
   }
 
   //метод который принимает новые данные пользователя и добавляет их на страницу.
-  setUserInfo({ popupName, popupJob }) {
+  setUserInfo({ popupName, popupJob, avatar}) {
     this._elementName.textContent = popupName;
     this._elementJob.textContent = popupJob;
+    this._avatar.src = avatar;
   }
 }

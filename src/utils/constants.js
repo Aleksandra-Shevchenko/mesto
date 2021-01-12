@@ -43,18 +43,21 @@ const selectorObj = {
   popupImageSelector: '.popup_type_image',
   popupProfileSelector: '.popup_type_edit',
   popupAddCardSelector: '.popup_type_add-card',
+  popupChangeAvatarSelector: '.popup_type_change-avatar',
   elementsSelector: '.elements',
   profileNameSelector: '.profile__title',
   profileJobSelector: '.profile__subtitle',
   cardId: '#card',
   trashCard: '.element__trash',
   popupConfirmSelector: '.popup_type_confirm',
+  avatarSelector:'.profile__avatar',
 };
 
 
 const container = document.querySelector(".container");
 const editButton = container.querySelector(".profile__edit-btn");
 const addPhotoButton = container.querySelector(".profile__add-btn");
+const changeAvatarButton = container.querySelector(".profile__change-btn");
 const popupProfile = document.querySelector('.popup_type_edit');
 const popupProfileInputs = popupProfile.querySelectorAll('.popup__input');
 
@@ -65,5 +68,6 @@ export {
   editButton,
   addPhotoButton,
   selectorObj,
-  popupProfileInputs
+  popupProfileInputs,
+  changeAvatarButton
 };
