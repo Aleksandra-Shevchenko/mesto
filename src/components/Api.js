@@ -1,3 +1,5 @@
+// --- КЛАСС ДЛЯ ОТПРАВКИ ЗАПРОСОВ НА СЕРВЕР ---
+
 export default class Api {
   constructor({
     baseUrl,
@@ -10,6 +12,7 @@ export default class Api {
     this._token = headers['authorization'];
   }
 
+  //метод получения информации о пользователе с сервера
   getUserData() {
     return fetch(this._userUrl, {
         headers: {
@@ -24,9 +27,10 @@ export default class Api {
       })
   }
 
+  //метод сохранения отредактированных данных пользователя на сервере
   saveUserChanges({
-    popupName,
-    popupJob
+    name,
+    about
   }) {
     return fetch(this._userUrl, {
         method: 'PATCH',
@@ -35,8 +39,8 @@ export default class Api {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          name: popupName,
-          about: popupJob,
+          name: name,
+          about: about,
         })
       })
       .then(res => {
@@ -47,85 +51,7 @@ export default class Api {
       })
   }
 
-  getInitialCards() {
-    return fetch(this._cardsUrl, {
-        headers: {
-          authorization: this._token,
-        }
-      })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Ошибка: ${res.status}`);
-      })
-  }
-
-  postNewCard({ name, link }) {
-    return fetch(this._cardsUrl, {
-      method: 'POST',
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: name,
-        link: link,
-      })
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-  }
-
-  deleteCard(cardId) {
-    return fetch(`${this._cardsUrl}/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-      }
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-  }
-
-  likedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        authorization: this._token,
-      }
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-  }
-
-  dislikedCard(cardId) {
-    return fetch(`${this._likesUrl}/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        authorization: this._token,
-      }
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-  }
-
+  //метод обновления аватара пользователя
   changedAvatar(src) {
     return fetch(`${this._userUrl}/avatar`, {
         method: 'PATCH',
@@ -145,4 +71,90 @@ export default class Api {
       })
   }
 
+  //метод получения карточек с сервера
+  getInitialCards() {
+    return fetch(this._cardsUrl, {
+        headers: {
+          authorization: this._token,
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+  }
+
+  //метод добавления новой карточки на сервер
+  postNewCard({
+    name,
+    link
+  }) {
+    return fetch(this._cardsUrl, {
+        method: 'POST',
+        headers: {
+          authorization: this._token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: name,
+          link: link,
+        })
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+  }
+
+  //метод удаления карточки пользователя с сервера
+  deleteCard(cardId) {
+    return fetch(`${this._cardsUrl}/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+          authorization: this._token,
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+  }
+
+  //метод постановки лайка карточке
+  likedCard(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+        method: 'PUT',
+        headers: {
+          authorization: this._token,
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+  }
+
+  //метод удаления лайка с карточки
+  dislikedCard(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+          authorization: this._token,
+        }
+      })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Ошибка: ${res.status}`);
+      })
+  }
 }

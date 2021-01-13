@@ -7,18 +7,18 @@ export default class UserInfo {
     this._avatar = document.querySelector(selectorAvatar);
   }
 
-  //метод который возвращает объект с данными пользователя. Этот метод пригодится когда данные пользователя нужно будет подставить в форму при открытии
+  //метод который возвращает объект с данными пользователя
   getUserInfo() {
     return this._profileData = {
-      popupName: this._elementName.textContent,
-      popupJob: this._elementJob.textContent,
+      name: this._elementName.textContent,
+      about: this._elementJob.textContent,
     };
   }
 
-  //метод который принимает новые данные пользователя и добавляет их на страницу.
-  setUserInfo({ popupName, popupJob, avatar}) {
-    this._elementName.textContent = popupName;
-    this._elementJob.textContent = popupJob;
+  //метод который принимает новые данные пользователя и добавляет их на страницу
+  setUserInfo({ name, about, avatar }) {
+    this._elementName.textContent = name;
+    this._elementJob.textContent = about;
     this._avatar.src = avatar;
   }
 }

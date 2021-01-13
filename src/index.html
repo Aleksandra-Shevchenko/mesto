@@ -45,9 +45,9 @@
       <div class="popup__container">
         <h3 class="popup__title">Редактировать профиль</h3>
         <form class="popup__form" name="popupFormProfile" novalidate>
-          <input id="name-input" type="text" placeholder="Имя" class="popup__input popup__input_text_name" name="popupName" minlength="2" maxlength="40" required>
+          <input id="name-input" type="text" placeholder="Имя" class="popup__input popup__input_text_name" name="name" minlength="2" maxlength="40" required>
           <span id="name-input-error" class="popup__input-error"></span>
-          <input id="job-input" type="text" placeholder="О себе" class="popup__input popup__input_text_job" name="popupJob" minlength="2" maxlength="200" required>
+          <input id="job-input" type="text" placeholder="О себе" class="popup__input popup__input_text_job" name="about" minlength="2" maxlength="200" required>
           <span id="job-input-error" class="popup__input-error"></span>
           <button class="popup__submit-btn" type="submit">Сохранить</button>
         </form>
@@ -71,7 +71,6 @@
     </section>
 
 
-
    <section class="popup popup_type_image">
     <div class="popup__container popup__container_type_image">
       <img class="popup__photo" src="#" alt="#">
@@ -79,6 +78,7 @@
       <button class="popup__close" type="button" aria-label="Закрыть окно"></button>
     </div>
    </section>
+
 
    <section class="popup popup_type_confirm">
     <div class="popup__container popup__container_type_confirm">
@@ -102,7 +102,6 @@
       <button class="popup__close" type="button" aria-label="Закрыть окно"></button>
     </div>
   </section>
-
 
 
     <template id="card">
